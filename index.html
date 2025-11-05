@@ -6,13 +6,15 @@
     <title>BeatMarket - Платформа для продажи битов</title>
     <style>
         :root {
-            --primary: #6C63FF;
-            --primary-dark: #554fd8;
-            --secondary: #FF6584;
-            --dark: #1E1E2C;
-            --darker: #151521;
-            --light: #F5F5F7;
+            --primary: #FFFFFF;
+            --primary-dark: #E0E0E0;
+            --secondary: #6C63FF;
+            --accent: #FF6584;
+            --dark: #0A0A0A;
+            --darker: #000000;
+            --light: #FFFFFF;
             --gray: #8A8AA0;
+            --dark-gray: #333333;
             --success: #4CAF50;
             --warning: #FF9800;
             --error: #F44336;
@@ -44,7 +46,8 @@
             position: sticky;
             top: 0;
             z-index: 100;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         .header-content {
@@ -62,14 +65,29 @@
         .logo img {
             height: 40px;
             width: auto;
+            border-radius: 8px;
         }
 
         .logo h1 {
             font-size: 1.5rem;
             font-weight: 700;
-            background: linear-gradient(90deg, var(--primary), var(--secondary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            color: var(--light);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+        }
+
+        .nav-links a {
+            color: var(--light);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--secondary);
         }
 
         .wallet-section {
@@ -77,23 +95,24 @@
         }
 
         .connect-wallet-btn {
-            background: linear-gradient(90deg, var(--primary), var(--primary-dark));
-            color: white;
+            background-color: var(--light);
+            color: var(--darker);
             border: none;
             padding: 10px 20px;
-            border-radius: 50px;
+            border-radius: 8px;
             font-weight: 600;
             cursor: pointer;
             display: flex;
             align-items: center;
             gap: 8px;
             transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(108, 99, 255, 0.3);
+            box-shadow: 0 4px 15px rgba(255, 255, 255, 0.1);
         }
 
         .connect-wallet-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(108, 99, 255, 0.4);
+            box-shadow: 0 6px 20px rgba(255, 255, 255, 0.2);
+            background-color: var(--primary-dark);
         }
 
         .wallet-modal {
@@ -104,8 +123,8 @@
             background-color: var(--dark);
             border-radius: 12px;
             padding: 20px;
-            width: 300px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            width: 320px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
             display: none;
             z-index: 101;
             border: 1px solid rgba(255, 255, 255, 0.1);
@@ -124,15 +143,18 @@
             cursor: pointer;
             transition: background-color 0.2s;
             margin-bottom: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         .wallet-option:hover {
             background-color: rgba(255, 255, 255, 0.05);
+            border-color: var(--secondary);
         }
 
         .wallet-option img {
             width: 30px;
             height: 30px;
+            border-radius: 6px;
         }
 
         .wallet-info {
@@ -164,17 +186,34 @@
 
         /* Hero Section */
         .hero {
-            padding: 80px 0;
+            padding: 100px 0;
             text-align: center;
             background: linear-gradient(135deg, var(--dark) 0%, var(--darker) 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 30% 20%, rgba(108, 99, 255, 0.1) 0%, transparent 50%),
+                        radial-gradient(circle at 70% 80%, rgba(255, 101, 132, 0.1) 0%, transparent 50%);
+            z-index: 0;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
         }
 
         .hero h2 {
-            font-size: 3rem;
+            font-size: 3.5rem;
             margin-bottom: 20px;
-            background: linear-gradient(90deg, var(--primary), var(--secondary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            color: var(--light);
         }
 
         .hero p {
@@ -193,7 +232,7 @@
 
         .btn {
             padding: 12px 30px;
-            border-radius: 50px;
+            border-radius: 8px;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
@@ -201,35 +240,36 @@
         }
 
         .btn-primary {
-            background: linear-gradient(90deg, var(--primary), var(--primary-dark));
-            color: white;
+            background-color: var(--light);
+            color: var(--darker);
         }
 
         .btn-secondary {
             background: transparent;
             color: var(--light);
-            border: 2px solid var(--primary);
+            border: 2px solid var(--light);
         }
 
         .btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(108, 99, 255, 0.3);
+            box-shadow: 0 6px 20px rgba(255, 255, 255, 0.2);
         }
 
         /* Beats Grid */
         .beats-section {
-            padding: 60px 0;
+            padding: 80px 0;
         }
 
         .section-title {
-            font-size: 2rem;
+            font-size: 2.2rem;
             margin-bottom: 40px;
             text-align: center;
+            color: var(--light);
         }
 
         .beats-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
             gap: 30px;
         }
 
@@ -238,27 +278,31 @@
             border-radius: 12px;
             overflow: hidden;
             transition: transform 0.3s ease, box-shadow 0.3s ease;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.05);
         }
 
         .beat-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+            border-color: rgba(255, 255, 255, 0.1);
         }
 
         .beat-image {
-            height: 180px;
+            height: 200px;
             width: 100%;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            background: linear-gradient(135deg, var(--dark-gray), var(--dark));
             display: flex;
             align-items: center;
             justify-content: center;
             position: relative;
+            overflow: hidden;
         }
 
         .beat-image img {
-            max-width: 100%;
-            max-height: 100%;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
 
         .play-button {
@@ -275,10 +319,12 @@
             justify-content: center;
             cursor: pointer;
             transition: background-color 0.3s;
+            border: 2px solid rgba(255, 255, 255, 0.2);
         }
 
         .play-button:hover {
             background-color: rgba(0, 0, 0, 0.9);
+            border-color: var(--light);
         }
 
         .play-button i {
@@ -291,20 +337,45 @@
         }
 
         .beat-title {
-            font-size: 1.2rem;
+            font-size: 1.3rem;
             font-weight: 600;
             margin-bottom: 5px;
+            color: var(--light);
         }
 
         .beat-producer {
             color: var(--gray);
             margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .producer-avatar {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .beat-stats {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+            font-size: 0.9rem;
+            color: var(--gray);
+        }
+
+        .beat-stat {
+            display: flex;
+            align-items: center;
+            gap: 5px;
         }
 
         .beat-price {
-            font-size: 1.3rem;
+            font-size: 1.4rem;
             font-weight: 700;
-            color: var(--primary);
+            color: var(--light);
             margin-bottom: 15px;
         }
 
@@ -322,22 +393,25 @@
             align-items: center;
             gap: 5px;
             transition: color 0.3s;
+            padding: 5px 10px;
+            border-radius: 20px;
         }
 
         .reaction-btn:hover {
-            color: var(--primary);
+            color: var(--accent);
+            background-color: rgba(255, 101, 132, 0.1);
         }
 
         .reaction-btn.active {
-            color: var(--secondary);
+            color: var(--accent);
         }
 
         .buy-btn {
-            background: linear-gradient(90deg, var(--primary), var(--primary-dark));
-            color: white;
+            background-color: var(--light);
+            color: var(--darker);
             border: none;
             padding: 8px 15px;
-            border-radius: 20px;
+            border-radius: 8px;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
@@ -345,13 +419,142 @@
 
         .buy-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 4px 10px rgba(108, 99, 255, 0.3);
+            box-shadow: 0 4px 10px rgba(255, 255, 255, 0.2);
+        }
+
+        .buy-btn:disabled {
+            background-color: var(--dark-gray);
+            color: var(--gray);
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        /* Beat Detail Page */
+        .beat-detail {
+            padding: 60px 0;
+            display: none;
+        }
+
+        .beat-detail.active {
+            display: block;
+        }
+
+        .back-button {
+            background: none;
+            border: none;
+            color: var(--light);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 30px;
+            font-size: 1rem;
+            transition: color 0.3s;
+        }
+
+        .back-button:hover {
+            color: var(--secondary);
+        }
+
+        .beat-detail-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+        }
+
+        .beat-detail-image {
+            border-radius: 12px;
+            overflow: hidden;
+            height: 400px;
+        }
+
+        .beat-detail-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .beat-detail-info {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .beat-detail-title {
+            font-size: 2.5rem;
+            color: var(--light);
+        }
+
+        .producer-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 10px;
+        }
+
+        .producer-avatar-large {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .producer-details h3 {
+            font-size: 1.2rem;
+            margin-bottom: 5px;
+        }
+
+        .producer-stats {
+            display: flex;
+            gap: 15px;
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+
+        .beat-detail-stats {
+            display: flex;
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .beat-detail-stat {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--light);
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: var(--gray);
+        }
+
+        .beat-detail-price {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--light);
+            margin: 20px 0;
+        }
+
+        .beat-detail-actions {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
         }
 
         /* Upload Section */
         .upload-section {
             padding: 60px 0;
             background-color: rgba(255, 255, 255, 0.02);
+            display: none;
+        }
+
+        .upload-section.active {
+            display: block;
         }
 
         .upload-form {
@@ -360,7 +563,8 @@
             background-color: var(--dark);
             padding: 30px;
             border-radius: 12px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.05);
         }
 
         .form-group {
@@ -371,6 +575,7 @@
             display: block;
             margin-bottom: 8px;
             font-weight: 600;
+            color: var(--light);
         }
 
         .form-control {
@@ -385,7 +590,7 @@
 
         .form-control:focus {
             outline: none;
-            border-color: var(--primary);
+            border-color: var(--secondary);
         }
 
         /* Footer */
@@ -393,6 +598,7 @@
             background-color: var(--dark);
             padding: 40px 0 20px;
             margin-top: 60px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         .footer-content {
@@ -411,7 +617,7 @@
         .footer-column h3 {
             font-size: 1.2rem;
             margin-bottom: 20px;
-            color: var(--primary);
+            color: var(--light);
         }
 
         .footer-column ul {
@@ -429,7 +635,7 @@
         }
 
         .footer-column ul li a:hover {
-            color: var(--primary);
+            color: var(--secondary);
         }
 
         .copyright {
@@ -463,7 +669,8 @@
             padding: 30px;
             width: 90%;
             max-width: 500px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         .modal-header {
@@ -476,6 +683,7 @@
         .modal-title {
             font-size: 1.5rem;
             font-weight: 600;
+            color: var(--light);
         }
 
         .close-modal {
@@ -502,8 +710,8 @@
         }
 
         .admin-btn {
-            background: linear-gradient(90deg, var(--secondary), #e05573);
-            color: white;
+            background-color: var(--light);
+            color: var(--darker);
             border: none;
             width: 50px;
             height: 50px;
@@ -512,13 +720,13 @@
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            box-shadow: 0 4px 15px rgba(255, 101, 132, 0.3);
+            box-shadow: 0 4px 15px rgba(255, 255, 255, 0.1);
             transition: all 0.3s ease;
         }
 
         .admin-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(255, 101, 132, 0.4);
+            box-shadow: 0 6px 20px rgba(255, 255, 255, 0.2);
         }
 
         .admin-modal {
@@ -529,7 +737,7 @@
             border-radius: 12px;
             padding: 20px;
             width: 300px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
             display: none;
             border: 1px solid rgba(255, 255, 255, 0.1);
         }
@@ -551,6 +759,14 @@
             .footer-content {
                 flex-direction: column;
             }
+            
+            .beat-detail-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .nav-links {
+                display: none;
+            }
         }
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -561,8 +777,14 @@
         <div class="container">
             <div class="header-content">
                 <div class="logo">
-                    <img id="site-logo" src="https://via.placeholder.com/40x40/6C63FF/FFFFFF?text=BM" alt="BeatMarket Logo">
+                    <img id="site-logo" src="https://via.placeholder.com/40x40/FFFFFF/000000?text=BM" alt="BeatMarket Logo">
                     <h1>BeatMarket</h1>
+                </div>
+                <div class="nav-links">
+                    <a href="#" id="homeLink">Главная</a>
+                    <a href="#" id="beatsLink">Биты</a>
+                    <a href="#" id="producersLink">Продавцы</a>
+                    <a href="#" id="aboutLink">О нас</a>
                 </div>
                 <div class="wallet-section">
                     <button class="connect-wallet-btn" id="connectWalletBtn">
@@ -602,17 +824,19 @@
     <!-- Hero Section -->
     <section class="hero">
         <div class="container">
-            <h2>Продавайте и покупайте эксклюзивные биты</h2>
-            <p>Платформа для торговли музыкальными битами с мгновенными криптоплатежами и защитой прав</p>
-            <div class="cta-buttons">
-                <button class="btn btn-primary" id="exploreBeatsBtn">Исследовать биты</button>
-                <button class="btn btn-secondary" id="uploadBeatBtn">Загрузить бит</button>
+            <div class="hero-content">
+                <h2>Продавайте и покупайте эксклюзивные биты</h2>
+                <p>Платформа для торговли музыкальными битами с мгновенными криптоплатежами и защитой прав</p>
+                <div class="cta-buttons">
+                    <button class="btn btn-primary" id="exploreBeatsBtn">Исследовать биты</button>
+                    <button class="btn btn-secondary" id="uploadBeatBtn">Загрузить бит</button>
+                </div>
             </div>
         </div>
     </section>
 
     <!-- Beats Section -->
-    <section class="beats-section">
+    <section class="beats-section" id="beatsSection">
         <div class="container">
             <h2 class="section-title">Популярные биты</h2>
             <div class="beats-grid" id="beatsGrid">
@@ -621,8 +845,20 @@
         </div>
     </section>
 
+    <!-- Beat Detail Section -->
+    <section class="beat-detail" id="beatDetail">
+        <div class="container">
+            <button class="back-button" id="backButton">
+                <i class="fas fa-arrow-left"></i> Назад к битам
+            </button>
+            <div class="beat-detail-content" id="beatDetailContent">
+                <!-- Beat detail content will be dynamically generated here -->
+            </div>
+        </div>
+    </section>
+
     <!-- Upload Section -->
-    <section class="upload-section" id="uploadSection" style="display: none;">
+    <section class="upload-section" id="uploadSection">
         <div class="container">
             <h2 class="section-title">Загрузить новый бит</h2>
             <div class="upload-form">
@@ -700,10 +936,10 @@
                 <div class="footer-column">
                     <h3>Навигация</h3>
                     <ul>
-                        <li><a href="#">Главная</a></li>
-                        <li><a href="#">Биты</a></li>
-                        <li><a href="#">Продавцы</a></li>
-                        <li><a href="#">О нас</a></li>
+                        <li><a href="#" id="footerHomeLink">Главная</a></li>
+                        <li><a href="#" id="footerBeatsLink">Биты</a></li>
+                        <li><a href="#" id="footerProducersLink">Продавцы</a></li>
+                        <li><a href="#" id="footerAboutLink">О нас</a></li>
                     </ul>
                 </div>
                 <div class="footer-column">
@@ -723,49 +959,121 @@
     </footer>
 
     <script>
-        // Sample beats data
+        // Sample beats data with real user info
         const beatsData = [
             {
                 id: 1,
                 title: "Midnight Vibes",
                 producer: "DJ Prodigy",
+                producerId: "user_001",
+                producerAvatar: "https://via.placeholder.com/100/6C63FF/FFFFFF?text=DP",
+                producerJoinDate: "2022-03-15",
+                producerSales: 42,
                 price: 0.15,
-                image: "https://via.placeholder.com/300x180/6C63FF/FFFFFF?text=Midnight+Vibes",
+                image: "https://via.placeholder.com/600x400/1E1E2C/FFFFFF?text=Midnight+Vibes",
                 likes: 24,
                 isLiked: false,
-                audio: "https://www.soundjay.com/button/beep-07.wav"
+                plays: 156,
+                purchases: 18,
+                uploadDate: "2023-09-10",
+                audio: "https://www.soundjay.com/button/beep-07.wav",
+                description: "Темный и атмосферный бит с глубокими басами и меланхоличными мелодиями. Идеально подходит для хип-хоп и R&B треков."
             },
             {
                 id: 2,
                 title: "Urban Dreams",
                 producer: "Beat Master",
+                producerId: "user_002",
+                producerAvatar: "https://via.placeholder.com/100/FF6584/FFFFFF?text=BM",
+                producerJoinDate: "2021-11-08",
+                producerSales: 87,
                 price: 0.2,
-                image: "https://via.placeholder.com/300x180/FF6584/FFFFFF?text=Urban+Dreams",
+                image: "https://via.placeholder.com/600x400/1E1E2C/FFFFFF?text=Urban+Dreams",
                 likes: 42,
                 isLiked: false,
-                audio: "https://www.soundjay.com/button/beep-07.wav"
+                plays: 243,
+                purchases: 31,
+                uploadDate: "2023-08-22",
+                audio: "https://www.soundjay.com/button/beep-07.wav",
+                description: "Энергичный уличный бит с тяжелыми барабанами и запоминающимся синтезаторным рифом. Создан для рэп-баттлов и клубных треков."
             },
             {
                 id: 3,
                 title: "Neon Lights",
                 producer: "Synth Wizard",
+                producerId: "user_003",
+                producerAvatar: "https://via.placeholder.com/100/4CAF50/FFFFFF?text=SW",
+                producerJoinDate: "2023-01-20",
+                producerSales: 15,
                 price: 0.12,
-                image: "https://via.placeholder.com/300x180/4CAF50/FFFFFF?text=Neon+Lights",
+                image: "https://via.placeholder.com/600x400/1E1E2C/FFFFFF?text=Neon+Lights",
                 likes: 18,
                 isLiked: false,
-                audio: "https://www.soundjay.com/button/beep-07.wav"
+                plays: 98,
+                purchases: 9,
+                uploadDate: "2023-10-05",
+                audio: "https://www.soundjay.com/button/beep-07.wav",
+                description: "Синтвейв бит с ретро-атмосферой и современным звучанием. Вдохновлен музыкой 80-х с элементами фьючер-бейс."
             },
             {
                 id: 4,
                 title: "Ocean Breeze",
                 producer: "Wave Maker",
+                producerId: "user_004",
+                producerAvatar: "https://via.placeholder.com/100/2196F3/FFFFFF?text=WM",
+                producerJoinDate: "2022-07-12",
+                producerSales: 56,
                 price: 0.18,
-                image: "https://via.placeholder.com/300x180/2196F3/FFFFFF?text=Ocean+Breeze",
+                image: "https://via.placeholder.com/600x400/1E1E2C/FFFFFF?text=Ocean+Breeze",
                 likes: 31,
                 isLiked: false,
-                audio: "https://www.soundjay.com/button/beep-07.wav"
+                plays: 187,
+                purchases: 22,
+                uploadDate: "2023-09-28",
+                audio: "https://www.soundjay.com/button/beep-07.wav",
+                description: "Расслабляющий бит с морской тематикой, плавными мелодиями и успокаивающими звуками океана. Подходит для лоу-фай и чиллаут музыки."
             }
         ];
+
+        // Sample users data
+        const usersData = {
+            "user_001": {
+                name: "DJ Prodigy",
+                avatar: "https://via.placeholder.com/100/6C63FF/FFFFFF?text=DP",
+                joinDate: "2022-03-15",
+                totalSales: 42,
+                totalEarnings: 6.3,
+                beats: [1, 5, 8],
+                rating: 4.8
+            },
+            "user_002": {
+                name: "Beat Master",
+                avatar: "https://via.placeholder.com/100/FF6584/FFFFFF?text=BM",
+                joinDate: "2021-11-08",
+                totalSales: 87,
+                totalEarnings: 17.4,
+                beats: [2, 6, 9],
+                rating: 4.9
+            },
+            "user_003": {
+                name: "Synth Wizard",
+                avatar: "https://via.placeholder.com/100/4CAF50/FFFFFF?text=SW",
+                joinDate: "2023-01-20",
+                totalSales: 15,
+                totalEarnings: 1.8,
+                beats: [3, 7],
+                rating: 4.5
+            },
+            "user_004": {
+                name: "Wave Maker",
+                avatar: "https://via.placeholder.com/100/2196F3/FFFFFF?text=WM",
+                joinDate: "2022-07-12",
+                totalSales: 56,
+                totalEarnings: 10.08,
+                beats: [4, 10],
+                rating: 4.7
+            }
+        };
 
         // App state
         let appState = {
@@ -773,7 +1081,9 @@
             walletType: null,
             userBalance: 0,
             commissionRate: 5, // 5% commission
-            currentAudio: null
+            currentAudio: null,
+            currentUser: null,
+            currentView: 'beats' // 'beats', 'upload', 'beatDetail'
         };
 
         // DOM Elements
@@ -794,6 +1104,10 @@
         const exploreBeatsBtn = document.getElementById('exploreBeatsBtn');
         const uploadBeatBtn = document.getElementById('uploadBeatBtn');
         const uploadSection = document.getElementById('uploadSection');
+        const beatsSection = document.getElementById('beatsSection');
+        const beatDetail = document.getElementById('beatDetail');
+        const backButton = document.getElementById('backButton');
+        const beatDetailContent = document.getElementById('beatDetailContent');
         const beatsGrid = document.getElementById('beatsGrid');
         const uploadBeatSubmit = document.getElementById('uploadBeatSubmit');
         const adminBtn = document.getElementById('adminBtn');
@@ -802,12 +1116,41 @@
         const siteLogo = document.getElementById('siteLogo');
         const siteLogoImg = document.getElementById('site-logo');
         const saveAdminSettings = document.getElementById('saveAdminSettings');
+        const homeLink = document.getElementById('homeLink');
+        const beatsLink = document.getElementById('beatsLink');
+        const producersLink = document.getElementById('producersLink');
+        const aboutLink = document.getElementById('aboutLink');
+        const footerHomeLink = document.getElementById('footerHomeLink');
+        const footerBeatsLink = document.getElementById('footerBeatsLink');
+        const footerProducersLink = document.getElementById('footerProducersLink');
+        const footerAboutLink = document.getElementById('footerAboutLink');
 
         // Initialize the app
         function initApp() {
             renderBeats();
             setupEventListeners();
             loadAdminSettings();
+            showView('beats');
+        }
+
+        // Show different views
+        function showView(view) {
+            // Hide all views
+            beatsSection.style.display = 'none';
+            uploadSection.style.display = 'none';
+            beatDetail.style.display = 'none';
+            
+            // Show selected view
+            if (view === 'beats') {
+                beatsSection.style.display = 'block';
+                appState.currentView = 'beats';
+            } else if (view === 'upload') {
+                uploadSection.style.display = 'block';
+                appState.currentView = 'upload';
+            } else if (view === 'beatDetail') {
+                beatDetail.style.display = 'block';
+                appState.currentView = 'beatDetail';
+            }
         }
 
         // Render beats to the grid
@@ -815,6 +1158,7 @@
             beatsGrid.innerHTML = '';
             
             beatsData.forEach(beat => {
+                const user = usersData[beat.producerId];
                 const beatCard = document.createElement('div');
                 beatCard.className = 'beat-card';
                 beatCard.innerHTML = `
@@ -826,7 +1170,21 @@
                     </div>
                     <div class="beat-info">
                         <h3 class="beat-title">${beat.title}</h3>
-                        <p class="beat-producer">by ${beat.producer}</p>
+                        <p class="beat-producer">
+                            <img src="${user.avatar}" alt="${user.name}" class="producer-avatar">
+                            by ${user.name}
+                        </p>
+                        <div class="beat-stats">
+                            <div class="beat-stat">
+                                <i class="fas fa-play"></i> ${beat.plays}
+                            </div>
+                            <div class="beat-stat">
+                                <i class="fas fa-shopping-cart"></i> ${beat.purchases}
+                            </div>
+                            <div class="beat-stat">
+                                <i class="far fa-calendar"></i> ${formatDate(beat.uploadDate)}
+                            </div>
+                        </div>
                         <div class="beat-price">${beat.price} ETH</div>
                         <div class="beat-actions">
                             <button class="reaction-btn ${beat.isLiked ? 'active' : ''}" data-beat-id="${beat.id}">
@@ -860,6 +1218,96 @@
                     buyBeat(beatId);
                 });
             });
+            
+            // Add click event to beat cards to view details
+            document.querySelectorAll('.beat-card').forEach(card => {
+                card.addEventListener('click', function(e) {
+                    // Don't trigger if clicking on buttons
+                    if (!e.target.closest('.play-button') && 
+                        !e.target.closest('.reaction-btn') && 
+                        !e.target.closest('.buy-btn')) {
+                        const beatId = parseInt(this.querySelector('.play-button').getAttribute('data-beat-id'));
+                        showBeatDetail(beatId);
+                    }
+                });
+            });
+        }
+
+        // Show beat detail view
+        function showBeatDetail(beatId) {
+            const beat = beatsData.find(b => b.id === beatId);
+            if (!beat) return;
+            
+            const user = usersData[beat.producerId];
+            const joinDate = new Date(user.joinDate);
+            const now = new Date();
+            const monthsOnPlatform = Math.floor((now - joinDate) / (1000 * 60 * 60 * 24 * 30));
+            
+            beatDetailContent.innerHTML = `
+                <div class="beat-detail-image">
+                    <img src="${beat.image}" alt="${beat.title}">
+                </div>
+                <div class="beat-detail-info">
+                    <h1 class="beat-detail-title">${beat.title}</h1>
+                    <div class="producer-info">
+                        <img src="${user.avatar}" alt="${user.name}" class="producer-avatar-large">
+                        <div class="producer-details">
+                            <h3>${user.name}</h3>
+                            <div class="producer-stats">
+                                <span>На платформе: ${monthsOnPlatform} мес.</span>
+                                <span>Продано битов: ${user.totalSales}</span>
+                                <span>Рейтинг: ${user.rating}/5</span>
+                            </div>
+                        </div>
+                    </div>
+                    <p>${beat.description}</p>
+                    <div class="beat-detail-stats">
+                        <div class="beat-detail-stat">
+                            <div class="stat-value">${beat.plays}</div>
+                            <div class="stat-label">Прослушиваний</div>
+                        </div>
+                        <div class="beat-detail-stat">
+                            <div class="stat-value">${beat.purchases}</div>
+                            <div class="stat-label">Покупок</div>
+                        </div>
+                        <div class="beat-detail-stat">
+                            <div class="stat-value">${beat.likes}</div>
+                            <div class="stat-label">Лайков</div>
+                        </div>
+                        <div class="beat-detail-stat">
+                            <div class="stat-value">${formatDate(beat.uploadDate)}</div>
+                            <div class="stat-label">Загружен</div>
+                        </div>
+                    </div>
+                    <div class="beat-detail-price">${beat.price} ETH</div>
+                    <div class="beat-detail-actions">
+                        <button class="btn btn-primary" id="detailPlayButton" data-beat-id="${beat.id}">
+                            <i class="fas fa-play"></i> Слушать
+                        </button>
+                        <button class="btn btn-secondary" id="detailBuyButton" data-beat-id="${beat.id}">
+                            <i class="fas fa-shopping-cart"></i> Купить сейчас
+                        </button>
+                        <button class="reaction-btn ${beat.isLiked ? 'active' : ''}" data-beat-id="${beat.id}">
+                            <i class="fas fa-heart"></i> <span>${beat.likes}</span>
+                        </button>
+                    </div>
+                </div>
+            `;
+            
+            // Add event listeners to detail page buttons
+            document.getElementById('detailPlayButton').addEventListener('click', function() {
+                playBeat(beatId);
+            });
+            
+            document.getElementById('detailBuyButton').addEventListener('click', function() {
+                buyBeat(beatId);
+            });
+            
+            document.querySelector('.beat-detail-info .reaction-btn').addEventListener('click', function() {
+                toggleLike(beatId);
+            });
+            
+            showView('beatDetail');
         }
 
         // Setup event listeners
@@ -884,13 +1332,40 @@
             
             // Navigation
             exploreBeatsBtn.addEventListener('click', function() {
-                uploadSection.style.display = 'none';
-                document.querySelector('.beats-section').scrollIntoView({ behavior: 'smooth' });
+                showView('beats');
             });
             
             uploadBeatBtn.addEventListener('click', function() {
-                uploadSection.style.display = 'block';
-                uploadSection.scrollIntoView({ behavior: 'smooth' });
+                if (!appState.connectedWallet) {
+                    showNotification('Пожалуйста, подключите кошелек сначала', 'error');
+                    return;
+                }
+                showView('upload');
+            });
+            
+            backButton.addEventListener('click', function() {
+                showView('beats');
+            });
+            
+            // Navigation links
+            homeLink.addEventListener('click', function(e) {
+                e.preventDefault();
+                showView('beats');
+            });
+            
+            beatsLink.addEventListener('click', function(e) {
+                e.preventDefault();
+                showView('beats');
+            });
+            
+            footerHomeLink.addEventListener('click', function(e) {
+                e.preventDefault();
+                showView('beats');
+            });
+            
+            footerBeatsLink.addEventListener('click', function(e) {
+                e.preventDefault();
+                showView('beats');
             });
             
             // Upload beat
@@ -915,32 +1390,98 @@
             });
         }
 
-        // Wallet functionality
+        // Wallet functionality with real integration
         function toggleWalletModal() {
             walletModal.classList.toggle('active');
         }
 
-        function connectWallet(walletType) {
-            // In a real app, this would connect to the actual wallet
-            // For demo purposes, we'll simulate a connection
-            
-            appState.connectedWallet = `0x${Math.random().toString(16).substr(2, 40)}`;
-            appState.walletType = walletType;
-            appState.userBalance = (Math.random() * 2).toFixed(4);
-            
-            // Update UI
-            walletAddress.textContent = `${appState.connectedWallet.substring(0, 6)}...${appState.connectedWallet.substring(38)}`;
-            walletBalance.textContent = appState.userBalance;
-            walletInfo.classList.add('active');
-            
-            // Update connect button
-            connectWalletBtn.innerHTML = `<i class="fas fa-wallet"></i> ${walletType}`;
-            
-            // Close modal
-            walletModal.classList.remove('active');
-            
-            // Show success message
-            showNotification(`Successfully connected to ${walletType}`, 'success');
+        async function connectWallet(walletType) {
+            try {
+                let accounts = [];
+                
+                switch(walletType) {
+                    case 'metamask':
+                        if (typeof window.ethereum !== 'undefined') {
+                            accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+                            // Get balance
+                            const balance = await window.ethereum.request({
+                                method: 'eth_getBalance',
+                                params: [accounts[0], 'latest']
+                            });
+                            appState.userBalance = parseInt(balance) / 1e18;
+                        } else {
+                            showNotification('MetaMask не установлен!', 'error');
+                            return;
+                        }
+                        break;
+                        
+                    case 'phantom':
+                        if (window.solana && window.solana.isPhantom) {
+                            const response = await window.solana.connect();
+                            accounts = [response.publicKey.toString()];
+                            // In a real app, you would fetch the SOL balance here
+                            appState.userBalance = (Math.random() * 2).toFixed(4);
+                        } else {
+                            showNotification('Phantom не установлен!', 'error');
+                            return;
+                        }
+                        break;
+                        
+                    case 'tonkeeper':
+                        // TON integration would go here
+                        // For demo, we'll simulate connection
+                        accounts = [`EQ${Math.random().toString(16).substr(2, 40)}`];
+                        appState.userBalance = (Math.random() * 2).toFixed(4);
+                        break;
+                        
+                    case 'telegram':
+                        // Telegram Wallet integration would go here
+                        // For demo, we'll simulate connection
+                        accounts = [`0x${Math.random().toString(16).substr(2, 40)}`];
+                        appState.userBalance = (Math.random() * 2).toFixed(4);
+                        break;
+                        
+                    default:
+                        showNotification('Неизвестный тип кошелька', 'error');
+                        return;
+                }
+                
+                if (accounts.length === 0) {
+                    showNotification('Не удалось подключиться к кошельку', 'error');
+                    return;
+                }
+                
+                appState.connectedWallet = accounts[0];
+                appState.walletType = walletType;
+                
+                // Update UI
+                walletAddress.textContent = `${appState.connectedWallet.substring(0, 6)}...${appState.connectedWallet.substring(appState.connectedWallet.length - 4)}`;
+                walletBalance.textContent = appState.userBalance.toFixed(4);
+                walletInfo.classList.add('active');
+                
+                // Update connect button
+                connectWalletBtn.innerHTML = `<i class="fas fa-wallet"></i> ${formatWalletName(walletType)}`;
+                
+                // Close modal
+                walletModal.classList.remove('active');
+                
+                // Show success message
+                showNotification(`Успешно подключен ${formatWalletName(walletType)}`, 'success');
+                
+            } catch (error) {
+                console.error('Wallet connection error:', error);
+                showNotification('Ошибка подключения кошелька', 'error');
+            }
+        }
+
+        function formatWalletName(walletType) {
+            const names = {
+                'metamask': 'MetaMask',
+                'telegram': 'Telegram Wallet',
+                'tonkeeper': 'Tonkeeper',
+                'phantom': 'Phantom'
+            };
+            return names[walletType] || walletType;
         }
 
         function disconnectWallet() {
@@ -953,7 +1494,7 @@
             connectWalletBtn.innerHTML = `<i class="fas fa-wallet"></i> Connect Wallet`;
             
             // Show message
-            showNotification('Wallet disconnected', 'info');
+            showNotification('Кошелек отключен', 'info');
         }
 
         // Beat functionality
@@ -965,6 +1506,10 @@
             // Stop current audio if playing
             if (appState.currentAudio) {
                 appState.currentAudio.pause();
+                // Reset all play buttons
+                document.querySelectorAll('.play-button i').forEach(icon => {
+                    icon.className = 'fas fa-play';
+                });
             }
             
             // Create and play new audio
@@ -973,12 +1518,34 @@
             
             // Update play button to pause
             const playButton = document.querySelector(`.play-button[data-beat-id="${beatId}"] i`);
-            playButton.className = 'fas fa-pause';
+            if (playButton) {
+                playButton.className = 'fas fa-pause';
+            }
+            
+            // Update detail page play button if open
+            const detailPlayButton = document.getElementById('detailPlayButton');
+            if (detailPlayButton && parseInt(detailPlayButton.getAttribute('data-beat-id')) === beatId) {
+                detailPlayButton.innerHTML = '<i class="fas fa-pause"></i> Пауза';
+            }
             
             // Change back to play when audio ends
             appState.currentAudio.onended = function() {
-                playButton.className = 'fas fa-play';
+                if (playButton) {
+                    playButton.className = 'fas fa-play';
+                }
+                if (detailPlayButton && parseInt(detailPlayButton.getAttribute('data-beat-id')) === beatId) {
+                    detailPlayButton.innerHTML = '<i class="fas fa-play"></i> Слушать';
+                }
             };
+            
+            // Increment play count
+            beat.plays++;
+            
+            // Update UI if on detail page
+            if (appState.currentView === 'beatDetail' && 
+                parseInt(document.getElementById('detailPlayButton').getAttribute('data-beat-id')) === beatId) {
+                document.querySelector('.beat-detail-stats .stat-value').textContent = beat.plays;
+            }
         }
 
         function toggleLike(beatId) {
@@ -995,16 +1562,24 @@
             }
             
             // Update UI
-            const likeButton = document.querySelector(`.reaction-btn[data-beat-id="${beatId}"]`);
-            const likeCount = likeButton.querySelector('span');
+            const likeButtons = document.querySelectorAll(`.reaction-btn[data-beat-id="${beatId}"]`);
+            likeButtons.forEach(likeButton => {
+                const likeCount = likeButton.querySelector('span');
+                
+                likeButton.classList.toggle('active');
+                likeCount.textContent = beat.likes;
+            });
             
-            likeButton.classList.toggle('active');
-            likeCount.textContent = beat.likes;
+            // Update detail page if open
+            if (appState.currentView === 'beatDetail' && 
+                parseInt(document.getElementById('detailPlayButton').getAttribute('data-beat-id')) === beatId) {
+                document.querySelector('.beat-detail-stats .stat-value:nth-child(3)').textContent = beat.likes;
+            }
         }
 
-        function buyBeat(beatId) {
+        async function buyBeat(beatId) {
             if (!appState.connectedWallet) {
-                showNotification('Please connect your wallet first', 'error');
+                showNotification('Пожалуйста, подключите кошелек сначала', 'error');
                 return;
             }
             
@@ -1012,21 +1587,42 @@
             
             if (!beat) return;
             
-            // Calculate commission and net amount
-            const commission = (beat.price * appState.commissionRate) / 100;
-            const netAmount = beat.price - commission;
+            // Check balance
+            if (appState.userBalance < beat.price) {
+                showNotification('Недостаточно средств на балансе', 'error');
+                return;
+            }
             
-            // In a real app, this would process the transaction
-            // For demo, we'll just show a confirmation
-            
-            showNotification(
-                `Purchase successful! ${commission.toFixed(4)} ETH commission sent to platform.`, 
-                'success'
-            );
-            
-            // Update user balance (simulated)
-            appState.userBalance = (parseFloat(appState.userBalance) - beat.price).toFixed(4);
-            walletBalance.textContent = appState.userBalance;
+            try {
+                // In a real app, this would process the transaction on the blockchain
+                // For demo, we'll simulate the transaction
+                
+                // Calculate commission and net amount
+                const commission = (beat.price * appState.commissionRate) / 100;
+                const netAmount = beat.price - commission;
+                
+                // Update balances (simulated)
+                appState.userBalance -= beat.price;
+                walletBalance.textContent = appState.userBalance.toFixed(4);
+                
+                // Update beat stats
+                beat.purchases++;
+                
+                // Update UI
+                if (appState.currentView === 'beatDetail' && 
+                    parseInt(document.getElementById('detailPlayButton').getAttribute('data-beat-id')) === beatId) {
+                    document.querySelector('.beat-detail-stats .stat-value:nth-child(2)').textContent = beat.purchases;
+                }
+                
+                showNotification(
+                    `Покупка успешна! ${netAmount.toFixed(4)} ETH отправлено продавцу. Комиссия платформы: ${commission.toFixed(4)} ETH.`, 
+                    'success'
+                );
+                
+            } catch (error) {
+                console.error('Transaction error:', error);
+                showNotification('Ошибка при выполнении транзакции', 'error');
+            }
         }
 
         function uploadBeat() {
@@ -1037,7 +1633,12 @@
             const image = document.getElementById('beatImage').files[0];
             
             if (!title || !description || !price || !file) {
-                showNotification('Please fill all required fields', 'error');
+                showNotification('Пожалуйста, заполните все обязательные поля', 'error');
+                return;
+            }
+            
+            if (!appState.connectedWallet) {
+                showNotification('Пожалуйста, подключите кошелек сначала', 'error');
                 return;
             }
             
@@ -1046,11 +1647,19 @@
                 id: beatsData.length + 1,
                 title: title,
                 producer: 'You', // In a real app, this would be the user's name
+                producerId: 'current_user',
+                producerAvatar: 'https://via.placeholder.com/100/6C63FF/FFFFFF?text=YOU',
+                producerJoinDate: new Date().toISOString().split('T')[0],
+                producerSales: 0,
                 price: price,
-                image: image ? URL.createObjectURL(image) : 'https://via.placeholder.com/300x180/6C63FF/FFFFFF?text=New+Beat',
+                image: image ? URL.createObjectURL(image) : 'https://via.placeholder.com/600x400/1E1E2C/FFFFFF?text=New+Beat',
                 likes: 0,
                 isLiked: false,
-                audio: URL.createObjectURL(file)
+                plays: 0,
+                purchases: 0,
+                uploadDate: new Date().toISOString().split('T')[0],
+                audio: URL.createObjectURL(file),
+                description: description
             };
             
             // Add to beats data
@@ -1067,17 +1676,16 @@
             document.getElementById('beatImage').value = '';
             
             // Show success message
-            showNotification('Beat uploaded successfully!', 'success');
+            showNotification('Бит успешно загружен!', 'success');
             
             // Navigate to beats section
-            uploadSection.style.display = 'none';
-            document.querySelector('.beats-section').scrollIntoView({ behavior: 'smooth' });
+            showView('beats');
         }
 
         // Withdraw functionality
         function openWithdrawModal() {
             if (!appState.connectedWallet) {
-                showNotification('Please connect your wallet first', 'error');
+                showNotification('Пожалуйста, подключите кошелек сначала', 'error');
                 return;
             }
             
@@ -1102,12 +1710,12 @@
             const amount = parseFloat(withdrawAmount.value);
             
             if (!amount || amount <= 0) {
-                showNotification('Please enter a valid amount', 'error');
+                showNotification('Пожалуйста, введите корректную сумму', 'error');
                 return;
             }
             
             if (amount > parseFloat(appState.userBalance)) {
-                showNotification('Insufficient balance', 'error');
+                showNotification('Недостаточно средств', 'error');
                 return;
             }
             
@@ -1115,11 +1723,11 @@
             const commission = (amount * appState.commissionRate) / 100;
             const netAmount = amount - commission;
             
-            // In a real app, this would process the withdrawal
+            // In a real app, this would process the withdrawal on the blockchain
             // For demo, we'll just show a confirmation
             
             showNotification(
-                `Withdrawal successful! ${netAmount.toFixed(4)} ETH sent to your wallet. ${commission.toFixed(4)} ETH commission applied.`, 
+                `Вывод успешен! ${netAmount.toFixed(4)} ETH отправлено на ваш кошелек. Комиссия платформы: ${commission.toFixed(4)} ETH.`, 
                 'success'
             );
             
@@ -1140,13 +1748,16 @@
             const newCommissionRate = parseInt(commissionRate.value);
             
             if (newCommissionRate < 1 || newCommissionRate > 20) {
-                showNotification('Commission rate must be between 1% and 20%', 'error');
+                showNotification('Комиссия должна быть между 1% и 20%', 'error');
                 return;
             }
             
             appState.commissionRate = newCommissionRate;
             
-            showNotification('Admin settings saved successfully!', 'success');
+            // Save to localStorage
+            localStorage.setItem('commissionRate', newCommissionRate);
+            
+            showNotification('Настройки администратора сохранены!', 'success');
             adminModal.classList.remove('active');
         }
 
@@ -1183,6 +1794,25 @@
         }
 
         // Utility functions
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            const now = new Date();
+            const diffTime = Math.abs(now - date);
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+            
+            if (diffDays === 1) {
+                return '1 день назад';
+            } else if (diffDays < 7) {
+                return `${diffDays} дней назад`;
+            } else if (diffDays < 30) {
+                const weeks = Math.floor(diffDays / 7);
+                return `${weeks} ${weeks === 1 ? 'неделя' : 'недель'} назад`;
+            } else {
+                const months = Math.floor(diffDays / 30);
+                return `${months} ${months === 1 ? 'месяц' : 'месяцев'} назад`;
+            }
+        }
+
         function showNotification(message, type) {
             // Create notification element
             const notification = document.createElement('div');
@@ -1198,8 +1828,9 @@
             notification.style.color = 'white';
             notification.style.fontWeight = '600';
             notification.style.zIndex = '10000';
-            notification.style.boxShadow = '0 5px 15px rgba(0, 0, 0, 0.2)';
+            notification.style.boxShadow = '0 5px 15px rgba(0, 0, 0, 0.3)';
             notification.style.transition = 'all 0.3s ease';
+            notification.style.maxWidth = '300px';
             
             // Set background color based on type
             switch(type) {
@@ -1213,7 +1844,7 @@
                     notification.style.backgroundColor = 'var(--warning)';
                     break;
                 default:
-                    notification.style.backgroundColor = 'var(--primary)';
+                    notification.style.backgroundColor = 'var(--secondary)';
             }
             
             // Add to page
@@ -1225,7 +1856,9 @@
                 notification.style.transform = 'translateX(100px)';
                 
                 setTimeout(() => {
-                    document.body.removeChild(notification);
+                    if (document.body.contains(notification)) {
+                        document.body.removeChild(notification);
+                    }
                 }, 300);
             }, 3000);
         }
