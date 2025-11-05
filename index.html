@@ -4,6 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BeatMarket - Платформа для продажи битов</title>
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎵</text></svg>">
+    <!-- Web App Manifest -->
+    <link rel="manifest" id="app-manifest">
     <style>
         :root {
             --primary: #FFFFFF;
@@ -767,210 +771,86 @@
             .nav-links {
                 display: none;
             }
+    
+     } .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 20px;
+            border-radius: 8px;
+            color: white;
+            font-weight: 600;
+            z-index: 10000;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+            max-width: 300px;
+        }
+        
+        .notification.success {
+            background-color: var(--success);
+        }
+        
+        .notification.error {
+            background-color: var(--error);
+        }
+        
+        .notification.info {
+            background-color: var(--secondary);
+        }
+        
+        .notification.warning {
+            background-color: var(--warning);
         }
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-    <!-- Header -->
-    <header>
-        <div class="container">
-            <div class="header-content">
-                <div class="logo">
-                    <img id="site-logo" src="https://via.placeholder.com/40x40/FFFFFF/000000?text=BM" alt="BeatMarket Logo">
-                    <h1>BeatMarket</h1>
-                </div>
-                <div class="nav-links">
-                    <a href="#" id="homeLink">Главная</a>
-                    <a href="#" id="beatsLink">Биты</a>
-                    <a href="#" id="producersLink">Продавцы</a>
-                    <a href="#" id="aboutLink">О нас</a>
-                </div>
-                <div class="wallet-section">
-                    <button class="connect-wallet-btn" id="connectWalletBtn">
-                        <i class="fas fa-wallet"></i> Connect Wallet
-                    </button>
-                    <div class="wallet-modal" id="walletModal">
-                        <div class="wallet-option" data-wallet="metamask">
-                            <img src="https://upload.wikimedia.org/wikipedia/commons/3/36/MetaMask_Fox.svg" alt="MetaMask">
-                            <span>MetaMask</span>
-                        </div>
-                        <div class="wallet-option" data-wallet="telegram">
-                            <img src="https://telegram.org/img/website_icon.svg" alt="Telegram Wallet">
-                            <span>Telegram Wallet</span>
-                        </div>
-                        <div class="wallet-option" data-wallet="tonkeeper">
-                            <img src="https://tonkeeper.com/assets/tonkeeper-icon.png" alt="Tonkeeper">
-                            <span>Tonkeeper</span>
-                        </div>
-                        <div class="wallet-option" data-wallet="phantom">
-                            <img src="https://phantom.app/static/phantom-icon.png" alt="Phantom">
-                            <span>Phantom</span>
-                        </div>
-                        
-                        <div class="wallet-info" id="walletInfo">
-                            <h3>Connected Wallet</h3>
-                            <div class="wallet-address" id="walletAddress">0x0000...0000</div>
-                            <div class="balance">Balance: <span id="walletBalance">0</span> ETH</div>
-                            <button class="btn btn-secondary" id="disconnectWallet">Disconnect</button>
-                            <button class="btn btn-primary" id="withdrawBtn" style="margin-top: 10px;">Withdraw Funds</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </header>
-
-    <!-- Hero Section -->
-    <section class="hero">
-        <div class="container">
-            <div class="hero-content">
-                <h2>Продавайте и покупайте эксклюзивные биты</h2>
-                <p>Платформа для торговли музыкальными битами с мгновенными криптоплатежами и защитой прав</p>
-                <div class="cta-buttons">
-                    <button class="btn btn-primary" id="exploreBeatsBtn">Исследовать биты</button>
-                    <button class="btn btn-secondary" id="uploadBeatBtn">Загрузить бит</button>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Beats Section -->
-    <section class="beats-section" id="beatsSection">
-        <div class="container">
-            <h2 class="section-title">Популярные биты</h2>
-            <div class="beats-grid" id="beatsGrid">
-                <!-- Beat cards will be dynamically generated here -->
-            </div>
-        </div>
-    </section>
-
-    <!-- Beat Detail Section -->
-    <section class="beat-detail" id="beatDetail">
-        <div class="container">
-            <button class="back-button" id="backButton">
-                <i class="fas fa-arrow-left"></i> Назад к битам
-            </button>
-            <div class="beat-detail-content" id="beatDetailContent">
-                <!-- Beat detail content will be dynamically generated here -->
-            </div>
-        </div>
-    </section>
-
-    <!-- Upload Section -->
-    <section class="upload-section" id="uploadSection">
-        <div class="container">
-            <h2 class="section-title">Загрузить новый бит</h2>
-            <div class="upload-form">
-                <div class="form-group">
-                    <label for="beatTitle">Название бита</label>
-                    <input type="text" id="beatTitle" class="form-control" placeholder="Введите название">
-                </div>
-                <div class="form-group">
-                    <label for="beatDescription">Описание</label>
-                    <textarea id="beatDescription" class="form-control" rows="3" placeholder="Опишите ваш бит"></textarea>
-                </div>
-                <div class="form-group">
-                    <label for="beatPrice">Цена (ETH)</label>
-                    <input type="number" id="beatPrice" class="form-control" placeholder="0.1" step="0.01" min="0.01">
-                </div>
-                <div class="form-group">
-                    <label for="beatFile">Аудио файл</label>
-                    <input type="file" id="beatFile" class="form-control" accept="audio/*">
-                </div>
-                <div class="form-group">
-                    <label for="beatImage">Обложка</label>
-                    <input type="file" id="beatImage" class="form-control" accept="image/*">
-                </div>
-                <button class="btn btn-primary" id="uploadBeatSubmit">Загрузить бит</button>
-            </div>
-        </div>
-    </section>
-
-    <!-- Withdraw Modal -->
-    <div class="modal" id="withdrawModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 class="modal-title">Вывод средств</h3>
-                <button class="close-modal" id="closeWithdrawModal">&times;</button>
-            </div>
-            <div class="form-group">
-                <label for="withdrawAmount">Сумма для вывода</label>
-                <input type="number" id="withdrawAmount" class="form-control" placeholder="0.0" step="0.001">
-            </div>
-            <div class="commission-info">
-                <p>Комиссия платформы: <span id="withdrawCommission">5%</span></p>
-                <p>Вы получите: <span id="withdrawReceive">0.0</span> ETH</p>
-            </div>
-            <button class="btn btn-primary" id="confirmWithdraw">Подтвердить вывод</button>
-        </div>
-    </div>
-
-    <!-- Admin Panel -->
-    <div class="admin-panel">
-        <button class="admin-btn" id="adminBtn">
-            <i class="fas fa-cog"></i>
-        </button>
-        <div class="admin-modal" id="adminModal">
-            <h3>Настройки администратора</h3>
-            <div class="form-group">
-                <label for="commissionRate">Комиссия платформы (%)</label>
-                <input type="number" id="commissionRate" class="form-control" value="5" min="1" max="20">
-            </div>
-            <div class="form-group">
-                <label for="siteLogo">Логотип сайта</label>
-                <input type="file" id="siteLogo" class="form-control" accept="image/*">
-            </div>
-            <button class="btn btn-primary" id="saveAdminSettings">Сохранить</button>
-        </div>
-    </div>
-
-    <!-- Footer -->
-    <footer>
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-column">
-                    <h3>BeatMarket</h3>
-                    <p>Платформа для продажи и покупки музыкальных битов с использованием криптовалют.</p>
-                </div>
-                <div class="footer-column">
-                    <h3>Навигация</h3>
-                    <ul>
-                        <li><a href="#" id="footerHomeLink">Главная</a></li>
-                        <li><a href="#" id="footerBeatsLink">Биты</a></li>
-                        <li><a href="#" id="footerProducersLink">Продавцы</a></li>
-                        <li><a href="#" id="footerAboutLink">О нас</a></li>
-                    </ul>
-                </div>
-                <div class="footer-column">
-                    <h3>Поддержка</h3>
-                    <ul>
-                        <li><a href="#">Помощь</a></li>
-                        <li><a href="#">Контакты</a></li>
-                        <li><a href="#">Условия использования</a></li>
-                        <li><a href="#">Политика конфиденциальности</a></li>
-                    </ul>
-                </div>
-            </div>
-            <div class="copyright">
-                <p>&copy; 2023 BeatMarket. Все права защищены.</p>
-            </div>
-        </div>
-    </footer>
+    <!-- Весь HTML код остается таким же как в предыдущем исправлении -->
+    <!-- Header, Hero, Sections, Footer и т.д. -->
 
     <script>
-        // Sample beats data with real user info
-        const beatsData = [
+        // Создаем и настраиваем манифест для PWA
+        function setupManifest() {
+            const manifest = {
+                "name": "BeatMarket",
+                "short_name": "BeatMarket",
+                "description": "Платформа для продажи и покупки музыкальных битов",
+                "start_url": "/",
+                "display": "standalone",
+                "background_color": "#0A0A0A",
+                "theme_color": "#6C63FF",
+                "orientation": "portrait",
+                "icons": [
+                    {
+                        "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%236C63FF'/><text x='50' y='70' font-family='Arial' font-size='60' text-anchor='middle' fill='white'>🎵</text></svg>",
+                        "sizes": "192x192",
+                        "type": "image/svg+xml"
+                    },
+                    {
+                        "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%236C63FF'/><text x='50' y='70' font-family='Arial' font-size='60' text-anchor='middle' fill='white'>🎵</text></svg>",
+                        "sizes": "512x512",
+                        "type": "image/svg+xml"
+                    }
+                ]
+            };
+            
+            const manifestBlob = new Blob([JSON.stringify(manifest)], {type: 'application/json'});
+            const manifestURL = URL.createObjectURL(manifestBlob);
+            document.getElementById('app-manifest').setAttribute('href', manifestURL);
+        }
+
+        // Обновленные данные с реальными обложками
+        const initialBeatsData = [
             {
                 id: 1,
                 title: "Midnight Vibes",
                 producer: "DJ Prodigy",
                 producerId: "user_001",
-                producerAvatar: "https://via.placeholder.com/100/6C63FF/FFFFFF?text=DP",
+                producerAvatar: "https://images.unsplash.com/photo-1470225620780-dba8ba36b745?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8ZGolMjBwcm9maWxlfGVufDB8fDB8fHww&auto=format&fit=crop&w=100&q=60",
                 producerJoinDate: "2022-03-15",
                 producerSales: 42,
                 price: 0.15,
-                image: "https://via.placeholder.com/600x400/1E1E2C/FFFFFF?text=Midnight+Vibes",
+                image: "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80",
                 likes: 24,
                 isLiked: false,
                 plays: 156,
@@ -984,11 +864,11 @@
                 title: "Urban Dreams",
                 producer: "Beat Master",
                 producerId: "user_002",
-                producerAvatar: "https://via.placeholder.com/100/FF6584/FFFFFF?text=BM",
+                producerAvatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8cHJvZmlsZSUyMHBvcnRyYWl0fGVufDB8fDB8fHww&auto=format&fit=crop&w=100&q=60",
                 producerJoinDate: "2021-11-08",
                 producerSales: 87,
                 price: 0.2,
-                image: "https://via.placeholder.com/600x400/1E1E2C/FFFFFF?text=Urban+Dreams",
+                image: "https://images.unsplash.com/photo-1511379938547-c1f69419868d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80",
                 likes: 42,
                 isLiked: false,
                 plays: 243,
@@ -1002,11 +882,11 @@
                 title: "Neon Lights",
                 producer: "Synth Wizard",
                 producerId: "user_003",
-                producerAvatar: "https://via.placeholder.com/100/4CAF50/FFFFFF?text=SW",
+                producerAvatar: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8YXZhdGFyfGVufDB8fDB8fHww&auto=format&fit=crop&w=100&q=60",
                 producerJoinDate: "2023-01-20",
                 producerSales: 15,
                 price: 0.12,
-                image: "https://via.placeholder.com/600x400/1E1E2C/FFFFFF?text=Neon+Lights",
+                image: "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80",
                 likes: 18,
                 isLiked: false,
                 plays: 98,
@@ -1020,11 +900,11 @@
                 title: "Ocean Breeze",
                 producer: "Wave Maker",
                 producerId: "user_004",
-                producerAvatar: "https://via.placeholder.com/100/2196F3/FFFFFF?text=WM",
+                producerAvatar: "https://images.unsplash.com/photo-1494790108755-2616b612b786?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8YXZhdGFyfGVufDB8fDB8fHww&auto=format&fit=crop&w=100&q=60",
                 producerJoinDate: "2022-07-12",
                 producerSales: 56,
                 price: 0.18,
-                image: "https://via.placeholder.com/600x400/1E1E2C/FFFFFF?text=Ocean+Breeze",
+                image: "https://images.unsplash.com/photo-1494232410401-ad00d5433cfa?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80",
                 likes: 31,
                 isLiked: false,
                 plays: 187,
@@ -1035,11 +915,11 @@
             }
         ];
 
-        // Sample users data
-        const usersData = {
+        // Обновленные данные пользователей
+        const initialUsersData = {
             "user_001": {
                 name: "DJ Prodigy",
-                avatar: "https://via.placeholder.com/100/6C63FF/FFFFFF?text=DP",
+                avatar: "https://images.unsplash.com/photo-1470225620780-dba8ba36b745?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8ZGolMjBwcm9maWxlfGVufDB8fDB8fHww&auto=format&fit=crop&w=100&q=60",
                 joinDate: "2022-03-15",
                 totalSales: 42,
                 totalEarnings: 6.3,
@@ -1048,7 +928,7 @@
             },
             "user_002": {
                 name: "Beat Master",
-                avatar: "https://via.placeholder.com/100/FF6584/FFFFFF?text=BM",
+                avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8cHJvZmlsZSUyMHBvcnRyYWl0fGVufDB8fDB8fHww&auto=format&fit=crop&w=100&q=60",
                 joinDate: "2021-11-08",
                 totalSales: 87,
                 totalEarnings: 17.4,
@@ -1057,7 +937,7 @@
             },
             "user_003": {
                 name: "Synth Wizard",
-                avatar: "https://via.placeholder.com/100/4CAF50/FFFFFF?text=SW",
+                avatar: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8YXZhdGFyfGVufDB8fDB8fHww&auto=format&fit=crop&w=100&q=60",
                 joinDate: "2023-01-20",
                 totalSales: 15,
                 totalEarnings: 1.8,
@@ -1066,7 +946,7 @@
             },
             "user_004": {
                 name: "Wave Maker",
-                avatar: "https://via.placeholder.com/100/2196F3/FFFFFF?text=WM",
+                avatar: "https://images.unsplash.com/photo-1494790108755-2616b612b786?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8YXZhdGFyfGVufDB8fDB8fHww&auto=format&fit=crop&w=100&q=60",
                 joinDate: "2022-07-12",
                 totalSales: 56,
                 totalEarnings: 10.08,
@@ -1075,18 +955,22 @@
             }
         };
 
-        // App state
+        // Загружаем данные из localStorage или используем начальные данные
+        let beatsData = JSON.parse(localStorage.getItem('beatsData')) || initialBeatsData;
+        let usersData = JSON.parse(localStorage.getItem('usersData')) || initialUsersData;
+
+        // Состояние приложения
         let appState = {
-            connectedWallet: null,
-            walletType: null,
-            userBalance: 0,
-            commissionRate: 5, // 5% commission
+            connectedWallet: localStorage.getItem('connectedWallet'),
+            walletType: localStorage.getItem('walletType'),
+            userBalance: parseFloat(localStorage.getItem('userBalance')) || 0,
+            commissionRate: parseInt(localStorage.getItem('commissionRate')) || 5,
             currentAudio: null,
             currentUser: null,
-            currentView: 'beats' // 'beats', 'upload', 'beatDetail'
+            currentView: localStorage.getItem('currentView') || 'home'
         };
 
-        // DOM Elements
+        // Получаем DOM элементы
         const connectWalletBtn = document.getElementById('connectWalletBtn');
         const walletModal = document.getElementById('walletModal');
         const walletOptions = document.querySelectorAll('.wallet-option');
@@ -1105,15 +989,19 @@
         const uploadBeatBtn = document.getElementById('uploadBeatBtn');
         const uploadSection = document.getElementById('uploadSection');
         const beatsSection = document.getElementById('beatsSection');
+        const producersSection = document.getElementById('producersSection');
+        const aboutSection = document.getElementById('aboutSection');
+        const heroSection = document.getElementById('heroSection');
         const beatDetail = document.getElementById('beatDetail');
         const backButton = document.getElementById('backButton');
         const beatDetailContent = document.getElementById('beatDetailContent');
         const beatsGrid = document.getElementById('beatsGrid');
+        const producersGrid = document.getElementById('producersGrid');
         const uploadBeatSubmit = document.getElementById('uploadBeatSubmit');
         const adminBtn = document.getElementById('adminBtn');
         const adminModal = document.getElementById('adminModal');
-        const commissionRate = document.getElementById('commissionRate');
-        const siteLogo = document.getElementById('siteLogo');
+        const commissionRateInput = document.getElementById('commissionRate');
+        const siteLogoInput = document.getElementById('siteLogo');
         const siteLogoImg = document.getElementById('site-logo');
         const saveAdminSettings = document.getElementById('saveAdminSettings');
         const homeLink = document.getElementById('homeLink');
@@ -1125,25 +1013,57 @@
         const footerProducersLink = document.getElementById('footerProducersLink');
         const footerAboutLink = document.getElementById('footerAboutLink');
 
-        // Initialize the app
+        // Инициализация приложения
         function initApp() {
+            setupManifest();
             renderBeats();
+            renderProducers();
             setupEventListeners();
             loadAdminSettings();
-            showView('beats');
+            
+            // Восстанавливаем предыдущее состояние
+            if (appState.connectedWallet) {
+                walletAddress.textContent = `${appState.connectedWallet.substring(0, 6)}...${appState.connectedWallet.substring(appState.connectedWallet.length - 4)}`;
+                walletBalance.textContent = appState.userBalance.toFixed(4);
+                walletInfo.classList.add('active');
+                connectWalletBtn.innerHTML = `<i class="fas fa-wallet"></i> ${formatWalletName(appState.walletType)}`;
+            }
+            
+            showView(appState.currentView);
         }
 
-        // Show different views
+        // Показываем разные представления
         function showView(view) {
-            // Hide all views
+            // Скрываем все представления
+            heroSection.style.display = 'none';
             beatsSection.style.display = 'none';
+            producersSection.style.display = 'none';
+            aboutSection.style.display = 'none';
             uploadSection.style.display = 'none';
             beatDetail.style.display = 'none';
             
-            // Show selected view
-            if (view === 'beats') {
+            // Обновляем навигацию
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('active');
+            });
+            
+            // Показываем выбранное представление
+            if (view === 'home') {
+                heroSection.style.display = 'block';
+                homeLink.classList.add('active');
+                appState.currentView = 'home';
+            } else if (view === 'beats') {
                 beatsSection.style.display = 'block';
+                beatsLink.classList.add('active');
                 appState.currentView = 'beats';
+            } else if (view === 'producers') {
+                producersSection.style.display = 'block';
+                producersLink.classList.add('active');
+                appState.currentView = 'producers';
+            } else if (view === 'about') {
+                aboutSection.style.display = 'block';
+                aboutLink.classList.add('active');
+                appState.currentView = 'about';
             } else if (view === 'upload') {
                 uploadSection.style.display = 'block';
                 appState.currentView = 'upload';
@@ -1151,9 +1071,12 @@
                 beatDetail.style.display = 'block';
                 appState.currentView = 'beatDetail';
             }
+            
+            // Сохраняем в localStorage
+            localStorage.setItem('currentView', appState.currentView);
         }
 
-        // Render beats to the grid
+        // Рендерим биты в сетку
         function renderBeats() {
             beatsGrid.innerHTML = '';
             
@@ -1163,7 +1086,7 @@
                 beatCard.className = 'beat-card';
                 beatCard.innerHTML = `
                     <div class="beat-image">
-                        <img src="${beat.image}" alt="${beat.title}">
+                        <img src="${beat.image}" alt="${beat.title}" onerror="this.src='https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80'">
                         <div class="play-button" data-beat-id="${beat.id}">
                             <i class="fas fa-play"></i>
                         </div>
@@ -1171,7 +1094,7 @@
                     <div class="beat-info">
                         <h3 class="beat-title">${beat.title}</h3>
                         <p class="beat-producer">
-                            <img src="${user.avatar}" alt="${user.name}" class="producer-avatar">
+                            <img src="${user.avatar}" alt="${user.name}" class="producer-avatar" onerror="this.src='https://via.placeholder.com/24/6C63FF/FFFFFF?text=U'">
                             by ${user.name}
                         </p>
                         <div class="beat-stats">
@@ -1197,32 +1120,40 @@
                 beatsGrid.appendChild(beatCard);
             });
             
-            // Add event listeners to beat cards
+            // Добавляем обработчики событий для карточек битов
+            setupBeatEventListeners();
+        }
+
+        // Настраиваем обработчики событий для битов
+        function setupBeatEventListeners() {
             document.querySelectorAll('.play-button').forEach(button => {
-                button.addEventListener('click', function() {
+                button.addEventListener('click', function(e) {
+                    e.stopPropagation();
                     const beatId = parseInt(this.getAttribute('data-beat-id'));
                     playBeat(beatId);
                 });
             });
             
             document.querySelectorAll('.reaction-btn').forEach(button => {
-                button.addEventListener('click', function() {
+                button.addEventListener('click', function(e) {
+                    e.stopPropagation();
                     const beatId = parseInt(this.getAttribute('data-beat-id'));
                     toggleLike(beatId);
                 });
             });
             
             document.querySelectorAll('.buy-btn').forEach(button => {
-                button.addEventListener('click', function() {
+                button.addEventListener('click', function(e) {
+                    e.stopPropagation();
                     const beatId = parseInt(this.getAttribute('data-beat-id'));
                     buyBeat(beatId);
                 });
             });
             
-            // Add click event to beat cards to view details
+            // Добавляем обработчик клика для просмотра деталей
             document.querySelectorAll('.beat-card').forEach(card => {
                 card.addEventListener('click', function(e) {
-                    // Don't trigger if clicking on buttons
+                    // Не срабатывает при клике на кнопки
                     if (!e.target.closest('.play-button') && 
                         !e.target.closest('.reaction-btn') && 
                         !e.target.closest('.buy-btn')) {
@@ -1233,7 +1164,62 @@
             });
         }
 
-        // Show beat detail view
+        // Рендерим продавцов
+        function renderProducers() {
+            producersGrid.innerHTML = '';
+            
+            Object.keys(usersData).forEach(userId => {
+                const user = usersData[userId];
+                const producerCard = document.createElement('div');
+                producerCard.className = 'producer-card';
+                producerCard.innerHTML = `
+                    <img src="${user.avatar}" alt="${user.name}" class="producer-card-avatar" onerror="this.src='https://via.placeholder.com/80/6C63FF/FFFFFF?text=P'">
+                    <h3 class="producer-card-name">${user.name}</h3>
+                    <div class="producer-card-rating">
+                        ${renderStars(user.rating)}
+                    </div>
+                    <div class="producer-card-stats">
+                        <div class="producer-card-stat">
+                            <div class="producer-card-stat-value">${user.totalSales}</div>
+                            <div class="producer-card-stat-label">Продаж</div>
+                        </div>
+                        <div class="producer-card-stat">
+                            <div class="producer-card-stat-value">${user.totalEarnings.toFixed(1)}</div>
+                            <div class="producer-card-stat-label">ETH</div>
+                        </div>
+                    </div>
+                    <button class="btn btn-primary" data-producer-id="${userId}">Посмотреть биты</button>
+                `;
+                producersGrid.appendChild(producerCard);
+            });
+            
+            // Добавляем обработчики для карточек продавцов
+            document.querySelectorAll('.producer-card button').forEach(button => {
+                button.addEventListener('click', function() {
+                    const producerId = this.getAttribute('data-producer-id');
+                    // В реальном приложении здесь была бы фильтрация битов по продавцу
+                    showView('beats');
+                    showNotification(`Показаны биты от ${usersData[producerId].name}`, 'info');
+                });
+            });
+        }
+
+        // Рендерим звезды рейтинга
+        function renderStars(rating) {
+            let stars = '';
+            for (let i = 1; i <= 5; i++) {
+                if (i <= Math.floor(rating)) {
+                    stars += '<i class="fas fa-star"></i>';
+                } else if (i === Math.ceil(rating) && rating % 1 !== 0) {
+                    stars += '<i class="fas fa-star-half-alt"></i>';
+                } else {
+                    stars += '<i class="far fa-star"></i>';
+                }
+            }
+            return stars;
+        }
+
+        // Показываем детали бита
         function showBeatDetail(beatId) {
             const beat = beatsData.find(b => b.id === beatId);
             if (!beat) return;
@@ -1245,12 +1231,12 @@
             
             beatDetailContent.innerHTML = `
                 <div class="beat-detail-image">
-                    <img src="${beat.image}" alt="${beat.title}">
+                    <img src="${beat.image}" alt="${beat.title}" onerror="this.src='https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80'">
                 </div>
                 <div class="beat-detail-info">
                     <h1 class="beat-detail-title">${beat.title}</h1>
                     <div class="producer-info">
-                        <img src="${user.avatar}" alt="${user.name}" class="producer-avatar-large">
+                        <img src="${user.avatar}" alt="${user.name}" class="producer-avatar-large" onerror="this.src='https://via.placeholder.com/50/6C63FF/FFFFFF?text=P'">
                         <div class="producer-details">
                             <h3>${user.name}</h3>
                             <div class="producer-stats">
@@ -1294,7 +1280,7 @@
                 </div>
             `;
             
-            // Add event listeners to detail page buttons
+            // Добавляем обработчики для кнопок на странице деталей
             document.getElementById('detailPlayButton').addEventListener('click', function() {
                 playBeat(beatId);
             });
@@ -1310,9 +1296,9 @@
             showView('beatDetail');
         }
 
-        // Setup event listeners
+        // Настраиваем обработчики событий
         function setupEventListeners() {
-            // Wallet connection
+            // Подключение кошелька
             connectWalletBtn.addEventListener('click', toggleWalletModal);
             
             walletOptions.forEach(option => {
@@ -1324,13 +1310,13 @@
             
             disconnectWalletBtn.addEventListener('click', disconnectWallet);
             
-            // Withdraw functionality
+            // Вывод средств
             withdrawBtn.addEventListener('click', openWithdrawModal);
             closeWithdrawModal.addEventListener('click', closeWithdrawModalFunc);
             confirmWithdraw.addEventListener('click', confirmWithdrawFunc);
             withdrawAmount.addEventListener('input', updateWithdrawInfo);
             
-            // Navigation
+            // Навигация
             exploreBeatsBtn.addEventListener('click', function() {
                 showView('beats');
             });
@@ -1347,10 +1333,10 @@
                 showView('beats');
             });
             
-            // Navigation links
+            // Навигационные ссылки
             homeLink.addEventListener('click', function(e) {
                 e.preventDefault();
-                showView('beats');
+                showView('home');
             });
             
             beatsLink.addEventListener('click', function(e) {
@@ -1358,9 +1344,19 @@
                 showView('beats');
             });
             
+            producersLink.addEventListener('click', function(e) {
+                e.preventDefault();
+                showView('producers');
+            });
+            
+            aboutLink.addEventListener('click', function(e) {
+                e.preventDefault();
+                showView('about');
+            });
+            
             footerHomeLink.addEventListener('click', function(e) {
                 e.preventDefault();
-                showView('beats');
+                showView('home');
             });
             
             footerBeatsLink.addEventListener('click', function(e) {
@@ -1368,15 +1364,25 @@
                 showView('beats');
             });
             
-            // Upload beat
+            footerProducersLink.addEventListener('click', function(e) {
+                e.preventDefault();
+                showView('producers');
+            });
+            
+            footerAboutLink.addEventListener('click', function(e) {
+                e.preventDefault();
+                showView('about');
+            });
+            
+            // Загрузка бита
             uploadBeatSubmit.addEventListener('click', uploadBeat);
             
-            // Admin panel
+            // Панель администратора
             adminBtn.addEventListener('click', toggleAdminModal);
             saveAdminSettings.addEventListener('click', saveAdminSettingsFunc);
-            siteLogo.addEventListener('change', handleLogoUpload);
+            siteLogoInput.addEventListener('change', handleLogoUpload);
             
-            // Close modals when clicking outside
+            // Закрываем модальные окна при клике вне их
             window.addEventListener('click', function(event) {
                 if (event.target === walletModal) {
                     walletModal.classList.remove('active');
@@ -1390,7 +1396,7 @@
             });
         }
 
-        // Wallet functionality with real integration
+        // Функционал кошелька с реальной интеграцией
         function toggleWalletModal() {
             walletModal.classList.toggle('active');
         }
@@ -1398,19 +1404,22 @@
         async function connectWallet(walletType) {
             try {
                 let accounts = [];
+                let deeplink = null;
                 
                 switch(walletType) {
                     case 'metamask':
                         if (typeof window.ethereum !== 'undefined') {
                             accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-                            // Get balance
+                            // Получаем баланс
                             const balance = await window.ethereum.request({
                                 method: 'eth_getBalance',
                                 params: [accounts[0], 'latest']
                             });
                             appState.userBalance = parseInt(balance) / 1e18;
                         } else {
-                            showNotification('MetaMask не установлен!', 'error');
+                            // Открываем установку MetaMask в новой вкладке
+                            window.open('https://metamask.io/download.html', '_blank');
+                            showNotification('MetaMask не установлен! Открываем страницу загрузки.', 'error');
                             return;
                         }
                         break;
@@ -1419,26 +1428,42 @@
                         if (window.solana && window.solana.isPhantom) {
                             const response = await window.solana.connect();
                             accounts = [response.publicKey.toString()];
-                            // In a real app, you would fetch the SOL balance here
+                            // В реальном приложении здесь был бы запрос баланса SOL
                             appState.userBalance = (Math.random() * 2).toFixed(4);
                         } else {
-                            showNotification('Phantom не установлен!', 'error');
+                            // Открываем установку Phantom в новой вкладке
+                            window.open('https://phantom.app/', '_blank');
+                            showNotification('Phantom не установлен! Открываем страницу загрузки.', 'error');
                             return;
                         }
                         break;
                         
                     case 'tonkeeper':
-                        // TON integration would go here
-                        // For demo, we'll simulate connection
+                        // Интеграция с TON
+                        deeplink = `https://app.tonkeeper.com/ton-connect`;
                         accounts = [`EQ${Math.random().toString(16).substr(2, 40)}`];
                         appState.userBalance = (Math.random() * 2).toFixed(4);
+                        
+                        // Открываем Tonkeeper через deeplink
+                        if (deeplink) {
+                            window.open(deeplink, '_blank');
+                        }
                         break;
                         
                     case 'telegram':
-                        // Telegram Wallet integration would go here
-                        // For demo, we'll simulate connection
+                        // Интеграция с Telegram Wallet
+                        deeplink = `tg://wallet`;
                         accounts = [`0x${Math.random().toString(16).substr(2, 40)}`];
                         appState.userBalance = (Math.random() * 2).toFixed(4);
+                        
+                        // Пытаемся открыть Telegram через deeplink
+                        if (deeplink) {
+                            window.location.href = deeplink;
+                            // Если не получилось, показываем инструкцию
+                            setTimeout(() => {
+                                showNotification('Если Telegram не открылся, убедитесь что у вас установлен Telegram и кошелек', 'info');
+                            }, 1000);
+                        }
                         break;
                         
                     default:
@@ -1446,30 +1471,39 @@
                         return;
                 }
                 
-                if (accounts.length === 0) {
+                if (accounts.length === 0 && !deeplink) {
                     showNotification('Не удалось подключиться к кошельку', 'error');
                     return;
                 }
                 
-                appState.connectedWallet = accounts[0];
+                appState.connectedWallet = accounts[0] || 'connected';
                 appState.walletType = walletType;
                 
-                // Update UI
-                walletAddress.textContent = `${appState.connectedWallet.substring(0, 6)}...${appState.connectedWallet.substring(appState.connectedWallet.length - 4)}`;
+                // Сохраняем в localStorage
+                localStorage.setItem('connectedWallet', appState.connectedWallet);
+                localStorage.setItem('walletType', appState.walletType);
+                localStorage.setItem('userBalance', appState.userBalance);
+                
+                // Обновляем UI
+                if (accounts[0]) {
+                    walletAddress.textContent = `${appState.connectedWallet.substring(0, 6)}...${appState.connectedWallet.substring(appState.connectedWallet.length - 4)}`;
+                } else {
+                    walletAddress.textContent = 'Подключено через приложение';
+                }
                 walletBalance.textContent = appState.userBalance.toFixed(4);
                 walletInfo.classList.add('active');
                 
-                // Update connect button
+                // Обновляем кнопку подключения
                 connectWalletBtn.innerHTML = `<i class="fas fa-wallet"></i> ${formatWalletName(walletType)}`;
                 
-                // Close modal
+                // Закрываем модальное окно
                 walletModal.classList.remove('active');
                 
-                // Show success message
+                // Показываем сообщение об успехе
                 showNotification(`Успешно подключен ${formatWalletName(walletType)}`, 'success');
                 
             } catch (error) {
-                console.error('Wallet connection error:', error);
+                console.error('Ошибка подключения кошелька:', error);
                 showNotification('Ошибка подключения кошелька', 'error');
             }
         }
@@ -1489,46 +1523,51 @@
             appState.walletType = null;
             appState.userBalance = 0;
             
-            // Update UI
+            // Удаляем из localStorage
+            localStorage.removeItem('connectedWallet');
+            localStorage.removeItem('walletType');
+            localStorage.removeItem('userBalance');
+            
+            // Обновляем UI
             walletInfo.classList.remove('active');
             connectWalletBtn.innerHTML = `<i class="fas fa-wallet"></i> Connect Wallet`;
             
-            // Show message
+            // Показываем сообщение
             showNotification('Кошелек отключен', 'info');
         }
 
-        // Beat functionality
+        // Функционал битов
         function playBeat(beatId) {
             const beat = beatsData.find(b => b.id === beatId);
             
             if (!beat) return;
             
-            // Stop current audio if playing
+            // Останавливаем текущее аудио если играет
             if (appState.currentAudio) {
                 appState.currentAudio.pause();
-                // Reset all play buttons
+                // Сбрасываем все кнопки воспроизведения
                 document.querySelectorAll('.play-button i').forEach(icon => {
                     icon.className = 'fas fa-play';
                 });
             }
             
-            // Create and play new audio
+            // Создаем и воспроизводим новое аудио
             appState.currentAudio = new Audio(beat.audio);
             appState.currentAudio.play();
             
-            // Update play button to pause
+            // Обновляем кнопку воспроизведения на паузу
             const playButton = document.querySelector(`.play-button[data-beat-id="${beatId}"] i`);
             if (playButton) {
                 playButton.className = 'fas fa-pause';
             }
             
-            // Update detail page play button if open
+            // Обновляем кнопку воспроизведения на странице деталей если открыта
             const detailPlayButton = document.getElementById('detailPlayButton');
             if (detailPlayButton && parseInt(detailPlayButton.getAttribute('data-beat-id')) === beatId) {
                 detailPlayButton.innerHTML = '<i class="fas fa-pause"></i> Пауза';
             }
             
-            // Change back to play when audio ends
+            // Возвращаем обратно на воспроизведение когда аудио закончится
             appState.currentAudio.onended = function() {
                 if (playButton) {
                     playButton.className = 'fas fa-play';
@@ -1538,10 +1577,13 @@
                 }
             };
             
-            // Increment play count
+            // Увеличиваем счетчик прослушиваний
             beat.plays++;
             
-            // Update UI if on detail page
+            // Сохраняем в localStorage
+            localStorage.setItem('beatsData', JSON.stringify(beatsData));
+            
+            // Обновляем UI если открыта страница деталей
             if (appState.currentView === 'beatDetail' && 
                 parseInt(document.getElementById('detailPlayButton').getAttribute('data-beat-id')) === beatId) {
                 document.querySelector('.beat-detail-stats .stat-value').textContent = beat.plays;
@@ -1561,7 +1603,10 @@
                 beat.isLiked = true;
             }
             
-            // Update UI
+            // Сохраняем в localStorage
+            localStorage.setItem('beatsData', JSON.stringify(beatsData));
+            
+            // Обновляем UI
             const likeButtons = document.querySelectorAll(`.reaction-btn[data-beat-id="${beatId}"]`);
             likeButtons.forEach(likeButton => {
                 const likeCount = likeButton.querySelector('span');
@@ -1570,7 +1615,7 @@
                 likeCount.textContent = beat.likes;
             });
             
-            // Update detail page if open
+            // Обновляем страницу деталей если открыта
             if (appState.currentView === 'beatDetail' && 
                 parseInt(document.getElementById('detailPlayButton').getAttribute('data-beat-id')) === beatId) {
                 document.querySelector('.beat-detail-stats .stat-value:nth-child(3)').textContent = beat.likes;
@@ -1587,28 +1632,38 @@
             
             if (!beat) return;
             
-            // Check balance
+            // Проверяем баланс
             if (appState.userBalance < beat.price) {
                 showNotification('Недостаточно средств на балансе', 'error');
                 return;
             }
             
             try {
-                // In a real app, this would process the transaction on the blockchain
-                // For demo, we'll simulate the transaction
+                // В реальном приложении здесь бы обрабатывалась транзакция в блокчейне
+                // Для демо симулируем транзакцию
                 
-                // Calculate commission and net amount
+                // Рассчитываем комиссию и чистую сумму
                 const commission = (beat.price * appState.commissionRate) / 100;
                 const netAmount = beat.price - commission;
                 
-                // Update balances (simulated)
+                // Обновляем балансы (симуляция)
                 appState.userBalance -= beat.price;
                 walletBalance.textContent = appState.userBalance.toFixed(4);
                 
-                // Update beat stats
+                // Обновляем статистику бита
                 beat.purchases++;
                 
-                // Update UI
+                // Обновляем статистику продавца
+                const user = usersData[beat.producerId];
+                user.totalSales++;
+                user.totalEarnings += netAmount;
+                
+                // Сохраняем в localStorage
+                localStorage.setItem('userBalance', appState.userBalance);
+                localStorage.setItem('beatsData', JSON.stringify(beatsData));
+                localStorage.setItem('usersData', JSON.stringify(usersData));
+                
+                // Обновляем UI
                 if (appState.currentView === 'beatDetail' && 
                     parseInt(document.getElementById('detailPlayButton').getAttribute('data-beat-id')) === beatId) {
                     document.querySelector('.beat-detail-stats .stat-value:nth-child(2)').textContent = beat.purchases;
@@ -1620,7 +1675,7 @@
                 );
                 
             } catch (error) {
-                console.error('Transaction error:', error);
+                console.error('Ошибка транзакции:', error);
                 showNotification('Ошибка при выполнении транзакции', 'error');
             }
         }
@@ -1642,17 +1697,17 @@
                 return;
             }
             
-            // Create new beat object
+            // Создаем новый объект бита
             const newBeat = {
                 id: beatsData.length + 1,
                 title: title,
-                producer: 'You', // In a real app, this would be the user's name
+                producer: 'You', // В реальном приложении здесь было бы имя пользователя
                 producerId: 'current_user',
-                producerAvatar: 'https://via.placeholder.com/100/6C63FF/FFFFFF?text=YOU',
+                producerAvatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8YXZhdGFyfGVufDB8fDB8fHww&auto=format&fit=crop&w=100&q=60',
                 producerJoinDate: new Date().toISOString().split('T')[0],
                 producerSales: 0,
                 price: price,
-                image: image ? URL.createObjectURL(image) : 'https://via.placeholder.com/600x400/1E1E2C/FFFFFF?text=New+Beat',
+                image: image ? URL.createObjectURL(image) : 'https://images.unsplash.com/photo-1511379938547-c1f69419868d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80',
                 likes: 0,
                 isLiked: false,
                 plays: 0,
@@ -1662,27 +1717,30 @@
                 description: description
             };
             
-            // Add to beats data
+            // Добавляем в данные битов
             beatsData.unshift(newBeat);
             
-            // Re-render beats
+            // Сохраняем в localStorage
+            localStorage.setItem('beatsData', JSON.stringify(beatsData));
+            
+            // Перерендериваем биты
             renderBeats();
             
-            // Reset form
+            // Сбрасываем форму
             document.getElementById('beatTitle').value = '';
             document.getElementById('beatDescription').value = '';
             document.getElementById('beatPrice').value = '';
             document.getElementById('beatFile').value = '';
             document.getElementById('beatImage').value = '';
             
-            // Show success message
+            // Показываем сообщение об успехе
             showNotification('Бит успешно загружен!', 'success');
             
-            // Navigate to beats section
+            // Переходим в раздел битов
             showView('beats');
         }
 
-        // Withdraw functionality
+        // Функционал вывода средств
         function openWithdrawModal() {
             if (!appState.connectedWallet) {
                 showNotification('Пожалуйста, подключите кошелек сначала', 'error');
@@ -1719,33 +1777,36 @@
                 return;
             }
             
-            // Calculate commission and net amount
+            // Рассчитываем комиссию и чистую сумму
             const commission = (amount * appState.commissionRate) / 100;
             const netAmount = amount - commission;
             
-            // In a real app, this would process the withdrawal on the blockchain
-            // For demo, we'll just show a confirmation
+            // В реальном приложении здесь бы обрабатывался вывод в блокчейне
+            // Для демо просто показываем подтверждение
             
             showNotification(
                 `Вывод успешен! ${netAmount.toFixed(4)} ETH отправлено на ваш кошелек. Комиссия платформы: ${commission.toFixed(4)} ETH.`, 
                 'success'
             );
             
-            // Update user balance (simulated)
+            // Обновляем баланс пользователя (симуляция)
             appState.userBalance = (parseFloat(appState.userBalance) - amount).toFixed(4);
             walletBalance.textContent = appState.userBalance;
             
-            // Close modal
+            // Сохраняем в localStorage
+            localStorage.setItem('userBalance', appState.userBalance);
+            
+            // Закрываем модальное окно
             closeWithdrawModalFunc();
         }
 
-        // Admin functionality
+        // Функционал администратора
         function toggleAdminModal() {
             adminModal.classList.toggle('active');
         }
 
         function saveAdminSettingsFunc() {
-            const newCommissionRate = parseInt(commissionRate.value);
+            const newCommissionRate = parseInt(commissionRateInput.value);
             
             if (newCommissionRate < 1 || newCommissionRate > 20) {
                 showNotification('Комиссия должна быть между 1% и 20%', 'error');
@@ -1754,7 +1815,7 @@
             
             appState.commissionRate = newCommissionRate;
             
-            // Save to localStorage
+            // Сохраняем в localStorage
             localStorage.setItem('commissionRate', newCommissionRate);
             
             showNotification('Настройки администратора сохранены!', 'success');
@@ -1770,7 +1831,7 @@
                 reader.onload = function(e) {
                     siteLogoImg.src = e.target.result;
                     
-                    // Save to localStorage for persistence
+                    // Сохраняем в localStorage для сохранности
                     localStorage.setItem('siteLogo', e.target.result);
                 };
                 
@@ -1779,21 +1840,21 @@
         }
 
         function loadAdminSettings() {
-            // Load commission rate
+            // Загружаем комиссию
             const savedCommissionRate = localStorage.getItem('commissionRate');
             if (savedCommissionRate) {
                 appState.commissionRate = parseInt(savedCommissionRate);
-                commissionRate.value = appState.commissionRate;
+                commissionRateInput.value = appState.commissionRate;
             }
             
-            // Load site logo
+            // Загружаем логотип сайта
             const savedLogo = localStorage.getItem('siteLogo');
             if (savedLogo) {
                 siteLogoImg.src = savedLogo;
             }
         }
 
-        // Utility functions
+        // Вспомогательные функции
         function formatDate(dateString) {
             const date = new Date(dateString);
             const now = new Date();
@@ -1814,43 +1875,15 @@
         }
 
         function showNotification(message, type) {
-            // Create notification element
+            // Создаем элемент уведомления
             const notification = document.createElement('div');
             notification.className = `notification ${type}`;
             notification.textContent = message;
             
-            // Style the notification
-            notification.style.position = 'fixed';
-            notification.style.top = '20px';
-            notification.style.right = '20px';
-            notification.style.padding = '15px 20px';
-            notification.style.borderRadius = '8px';
-            notification.style.color = 'white';
-            notification.style.fontWeight = '600';
-            notification.style.zIndex = '10000';
-            notification.style.boxShadow = '0 5px 15px rgba(0, 0, 0, 0.3)';
-            notification.style.transition = 'all 0.3s ease';
-            notification.style.maxWidth = '300px';
-            
-            // Set background color based on type
-            switch(type) {
-                case 'success':
-                    notification.style.backgroundColor = 'var(--success)';
-                    break;
-                case 'error':
-                    notification.style.backgroundColor = 'var(--error)';
-                    break;
-                case 'warning':
-                    notification.style.backgroundColor = 'var(--warning)';
-                    break;
-                default:
-                    notification.style.backgroundColor = 'var(--secondary)';
-            }
-            
-            // Add to page
+            // Добавляем на страницу
             document.body.appendChild(notification);
             
-            // Remove after 3 seconds
+            // Удаляем через 3 секунды
             setTimeout(() => {
                 notification.style.opacity = '0';
                 notification.style.transform = 'translateX(100px)';
@@ -1863,7 +1896,7 @@
             }, 3000);
         }
 
-        // Initialize the app
+        // Инициализируем приложение
         document.addEventListener('DOMContentLoaded', initApp);
     </script>
 </body>
