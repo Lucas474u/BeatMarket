@@ -1,0 +1,1237 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BeatMarket - Платформа для продажи битов</title>
+    <style>
+        :root {
+            --primary: #6C63FF;
+            --primary-dark: #554fd8;
+            --secondary: #FF6584;
+            --dark: #1E1E2C;
+            --darker: #151521;
+            --light: #F5F5F7;
+            --gray: #8A8AA0;
+            --success: #4CAF50;
+            --warning: #FF9800;
+            --error: #F44336;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--darker);
+            color: var(--light);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header Styles */
+        header {
+            background-color: var(--dark);
+            padding: 15px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo img {
+            height: 40px;
+            width: auto;
+        }
+
+        .logo h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .wallet-section {
+            position: relative;
+        }
+
+        .connect-wallet-btn {
+            background: linear-gradient(90deg, var(--primary), var(--primary-dark));
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(108, 99, 255, 0.3);
+        }
+
+        .connect-wallet-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(108, 99, 255, 0.4);
+        }
+
+        .wallet-modal {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            margin-top: 10px;
+            background-color: var(--dark);
+            border-radius: 12px;
+            padding: 20px;
+            width: 300px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            display: none;
+            z-index: 101;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .wallet-modal.active {
+            display: block;
+        }
+
+        .wallet-option {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            margin-bottom: 10px;
+        }
+
+        .wallet-option:hover {
+            background-color: rgba(255, 255, 255, 0.05);
+        }
+
+        .wallet-option img {
+            width: 30px;
+            height: 30px;
+        }
+
+        .wallet-info {
+            display: none;
+            margin-top: 20px;
+            padding: 15px;
+            background-color: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+        }
+
+        .wallet-info.active {
+            display: block;
+        }
+
+        .wallet-address {
+            font-family: monospace;
+            background-color: rgba(0, 0, 0, 0.2);
+            padding: 5px 10px;
+            border-radius: 4px;
+            margin: 10px 0;
+            word-break: break-all;
+        }
+
+        .balance {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin: 10px 0;
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 80px 0;
+            text-align: center;
+            background: linear-gradient(135deg, var(--dark) 0%, var(--darker) 100%);
+        }
+
+        .hero h2 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 600px;
+            margin: 0 auto 30px;
+            color: var(--gray);
+        }
+
+        .cta-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .btn {
+            padding: 12px 30px;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+        }
+
+        .btn-primary {
+            background: linear-gradient(90deg, var(--primary), var(--primary-dark));
+            color: white;
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--light);
+            border: 2px solid var(--primary);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(108, 99, 255, 0.3);
+        }
+
+        /* Beats Grid */
+        .beats-section {
+            padding: 60px 0;
+        }
+
+        .section-title {
+            font-size: 2rem;
+            margin-bottom: 40px;
+            text-align: center;
+        }
+
+        .beats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 30px;
+        }
+
+        .beat-card {
+            background-color: var(--dark);
+            border-radius: 12px;
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .beat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .beat-image {
+            height: 180px;
+            width: 100%;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .beat-image img {
+            max-width: 100%;
+            max-height: 100%;
+        }
+
+        .play-button {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgba(0, 0, 0, 0.7);
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .play-button:hover {
+            background-color: rgba(0, 0, 0, 0.9);
+        }
+
+        .play-button i {
+            color: white;
+            font-size: 20px;
+        }
+
+        .beat-info {
+            padding: 20px;
+        }
+
+        .beat-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .beat-producer {
+            color: var(--gray);
+            margin-bottom: 10px;
+        }
+
+        .beat-price {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+
+        .beat-actions {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .reaction-btn {
+            background: none;
+            border: none;
+            color: var(--gray);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            transition: color 0.3s;
+        }
+
+        .reaction-btn:hover {
+            color: var(--primary);
+        }
+
+        .reaction-btn.active {
+            color: var(--secondary);
+        }
+
+        .buy-btn {
+            background: linear-gradient(90deg, var(--primary), var(--primary-dark));
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .buy-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(108, 99, 255, 0.3);
+        }
+
+        /* Upload Section */
+        .upload-section {
+            padding: 60px 0;
+            background-color: rgba(255, 255, 255, 0.02);
+        }
+
+        .upload-form {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: var(--dark);
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            background-color: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: var(--light);
+            font-size: 1rem;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--dark);
+            padding: 40px 0 20px;
+            margin-top: 60px;
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 40px;
+            margin-bottom: 30px;
+        }
+
+        .footer-column {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .footer-column h3 {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            color: var(--primary);
+        }
+
+        .footer-column ul {
+            list-style: none;
+        }
+
+        .footer-column ul li {
+            margin-bottom: 10px;
+        }
+
+        .footer-column ul li a {
+            color: var(--gray);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-column ul li a:hover {
+            color: var(--primary);
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--gray);
+        }
+
+        /* Withdraw Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background-color: var(--dark);
+            border-radius: 12px;
+            padding: 30px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            color: var(--gray);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        .commission-info {
+            background-color: rgba(255, 255, 255, 0.05);
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+        }
+
+        /* Admin Panel */
+        .admin-panel {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 99;
+        }
+
+        .admin-btn {
+            background: linear-gradient(90deg, var(--secondary), #e05573);
+            color: white;
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(255, 101, 132, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .admin-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 101, 132, 0.4);
+        }
+
+        .admin-modal {
+            position: absolute;
+            bottom: 60px;
+            right: 0;
+            background-color: var(--dark);
+            border-radius: 12px;
+            padding: 20px;
+            width: 300px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            display: none;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .admin-modal.active {
+            display: block;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h2 {
+                font-size: 2.2rem;
+            }
+            
+            .beats-grid {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            }
+            
+            .footer-content {
+                flex-direction: column;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <img id="site-logo" src="https://via.placeholder.com/40x40/6C63FF/FFFFFF?text=BM" alt="BeatMarket Logo">
+                    <h1>BeatMarket</h1>
+                </div>
+                <div class="wallet-section">
+                    <button class="connect-wallet-btn" id="connectWalletBtn">
+                        <i class="fas fa-wallet"></i> Connect Wallet
+                    </button>
+                    <div class="wallet-modal" id="walletModal">
+                        <div class="wallet-option" data-wallet="metamask">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/3/36/MetaMask_Fox.svg" alt="MetaMask">
+                            <span>MetaMask</span>
+                        </div>
+                        <div class="wallet-option" data-wallet="telegram">
+                            <img src="https://telegram.org/img/website_icon.svg" alt="Telegram Wallet">
+                            <span>Telegram Wallet</span>
+                        </div>
+                        <div class="wallet-option" data-wallet="tonkeeper">
+                            <img src="https://tonkeeper.com/assets/tonkeeper-icon.png" alt="Tonkeeper">
+                            <span>Tonkeeper</span>
+                        </div>
+                        <div class="wallet-option" data-wallet="phantom">
+                            <img src="https://phantom.app/static/phantom-icon.png" alt="Phantom">
+                            <span>Phantom</span>
+                        </div>
+                        
+                        <div class="wallet-info" id="walletInfo">
+                            <h3>Connected Wallet</h3>
+                            <div class="wallet-address" id="walletAddress">0x0000...0000</div>
+                            <div class="balance">Balance: <span id="walletBalance">0</span> ETH</div>
+                            <button class="btn btn-secondary" id="disconnectWallet">Disconnect</button>
+                            <button class="btn btn-primary" id="withdrawBtn" style="margin-top: 10px;">Withdraw Funds</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <h2>Продавайте и покупайте эксклюзивные биты</h2>
+            <p>Платформа для торговли музыкальными битами с мгновенными криптоплатежами и защитой прав</p>
+            <div class="cta-buttons">
+                <button class="btn btn-primary" id="exploreBeatsBtn">Исследовать биты</button>
+                <button class="btn btn-secondary" id="uploadBeatBtn">Загрузить бит</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Beats Section -->
+    <section class="beats-section">
+        <div class="container">
+            <h2 class="section-title">Популярные биты</h2>
+            <div class="beats-grid" id="beatsGrid">
+                <!-- Beat cards will be dynamically generated here -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Upload Section -->
+    <section class="upload-section" id="uploadSection" style="display: none;">
+        <div class="container">
+            <h2 class="section-title">Загрузить новый бит</h2>
+            <div class="upload-form">
+                <div class="form-group">
+                    <label for="beatTitle">Название бита</label>
+                    <input type="text" id="beatTitle" class="form-control" placeholder="Введите название">
+                </div>
+                <div class="form-group">
+                    <label for="beatDescription">Описание</label>
+                    <textarea id="beatDescription" class="form-control" rows="3" placeholder="Опишите ваш бит"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="beatPrice">Цена (ETH)</label>
+                    <input type="number" id="beatPrice" class="form-control" placeholder="0.1" step="0.01" min="0.01">
+                </div>
+                <div class="form-group">
+                    <label for="beatFile">Аудио файл</label>
+                    <input type="file" id="beatFile" class="form-control" accept="audio/*">
+                </div>
+                <div class="form-group">
+                    <label for="beatImage">Обложка</label>
+                    <input type="file" id="beatImage" class="form-control" accept="image/*">
+                </div>
+                <button class="btn btn-primary" id="uploadBeatSubmit">Загрузить бит</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Withdraw Modal -->
+    <div class="modal" id="withdrawModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Вывод средств</h3>
+                <button class="close-modal" id="closeWithdrawModal">&times;</button>
+            </div>
+            <div class="form-group">
+                <label for="withdrawAmount">Сумма для вывода</label>
+                <input type="number" id="withdrawAmount" class="form-control" placeholder="0.0" step="0.001">
+            </div>
+            <div class="commission-info">
+                <p>Комиссия платформы: <span id="withdrawCommission">5%</span></p>
+                <p>Вы получите: <span id="withdrawReceive">0.0</span> ETH</p>
+            </div>
+            <button class="btn btn-primary" id="confirmWithdraw">Подтвердить вывод</button>
+        </div>
+    </div>
+
+    <!-- Admin Panel -->
+    <div class="admin-panel">
+        <button class="admin-btn" id="adminBtn">
+            <i class="fas fa-cog"></i>
+        </button>
+        <div class="admin-modal" id="adminModal">
+            <h3>Настройки администратора</h3>
+            <div class="form-group">
+                <label for="commissionRate">Комиссия платформы (%)</label>
+                <input type="number" id="commissionRate" class="form-control" value="5" min="1" max="20">
+            </div>
+            <div class="form-group">
+                <label for="siteLogo">Логотип сайта</label>
+                <input type="file" id="siteLogo" class="form-control" accept="image/*">
+            </div>
+            <button class="btn btn-primary" id="saveAdminSettings">Сохранить</button>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>BeatMarket</h3>
+                    <p>Платформа для продажи и покупки музыкальных битов с использованием криптовалют.</p>
+                </div>
+                <div class="footer-column">
+                    <h3>Навигация</h3>
+                    <ul>
+                        <li><a href="#">Главная</a></li>
+                        <li><a href="#">Биты</a></li>
+                        <li><a href="#">Продавцы</a></li>
+                        <li><a href="#">О нас</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Поддержка</h3>
+                    <ul>
+                        <li><a href="#">Помощь</a></li>
+                        <li><a href="#">Контакты</a></li>
+                        <li><a href="#">Условия использования</a></li>
+                        <li><a href="#">Политика конфиденциальности</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2023 BeatMarket. Все права защищены.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Sample beats data
+        const beatsData = [
+            {
+                id: 1,
+                title: "Midnight Vibes",
+                producer: "DJ Prodigy",
+                price: 0.15,
+                image: "https://via.placeholder.com/300x180/6C63FF/FFFFFF?text=Midnight+Vibes",
+                likes: 24,
+                isLiked: false,
+                audio: "https://www.soundjay.com/button/beep-07.wav"
+            },
+            {
+                id: 2,
+                title: "Urban Dreams",
+                producer: "Beat Master",
+                price: 0.2,
+                image: "https://via.placeholder.com/300x180/FF6584/FFFFFF?text=Urban+Dreams",
+                likes: 42,
+                isLiked: false,
+                audio: "https://www.soundjay.com/button/beep-07.wav"
+            },
+            {
+                id: 3,
+                title: "Neon Lights",
+                producer: "Synth Wizard",
+                price: 0.12,
+                image: "https://via.placeholder.com/300x180/4CAF50/FFFFFF?text=Neon+Lights",
+                likes: 18,
+                isLiked: false,
+                audio: "https://www.soundjay.com/button/beep-07.wav"
+            },
+            {
+                id: 4,
+                title: "Ocean Breeze",
+                producer: "Wave Maker",
+                price: 0.18,
+                image: "https://via.placeholder.com/300x180/2196F3/FFFFFF?text=Ocean+Breeze",
+                likes: 31,
+                isLiked: false,
+                audio: "https://www.soundjay.com/button/beep-07.wav"
+            }
+        ];
+
+        // App state
+        let appState = {
+            connectedWallet: null,
+            walletType: null,
+            userBalance: 0,
+            commissionRate: 5, // 5% commission
+            currentAudio: null
+        };
+
+        // DOM Elements
+        const connectWalletBtn = document.getElementById('connectWalletBtn');
+        const walletModal = document.getElementById('walletModal');
+        const walletOptions = document.querySelectorAll('.wallet-option');
+        const walletInfo = document.getElementById('walletInfo');
+        const walletAddress = document.getElementById('walletAddress');
+        const walletBalance = document.getElementById('walletBalance');
+        const disconnectWalletBtn = document.getElementById('disconnectWallet');
+        const withdrawBtn = document.getElementById('withdrawBtn');
+        const withdrawModal = document.getElementById('withdrawModal');
+        const closeWithdrawModal = document.getElementById('closeWithdrawModal');
+        const confirmWithdraw = document.getElementById('confirmWithdraw');
+        const withdrawAmount = document.getElementById('withdrawAmount');
+        const withdrawCommission = document.getElementById('withdrawCommission');
+        const withdrawReceive = document.getElementById('withdrawReceive');
+        const exploreBeatsBtn = document.getElementById('exploreBeatsBtn');
+        const uploadBeatBtn = document.getElementById('uploadBeatBtn');
+        const uploadSection = document.getElementById('uploadSection');
+        const beatsGrid = document.getElementById('beatsGrid');
+        const uploadBeatSubmit = document.getElementById('uploadBeatSubmit');
+        const adminBtn = document.getElementById('adminBtn');
+        const adminModal = document.getElementById('adminModal');
+        const commissionRate = document.getElementById('commissionRate');
+        const siteLogo = document.getElementById('siteLogo');
+        const siteLogoImg = document.getElementById('site-logo');
+        const saveAdminSettings = document.getElementById('saveAdminSettings');
+
+        // Initialize the app
+        function initApp() {
+            renderBeats();
+            setupEventListeners();
+            loadAdminSettings();
+        }
+
+        // Render beats to the grid
+        function renderBeats() {
+            beatsGrid.innerHTML = '';
+            
+            beatsData.forEach(beat => {
+                const beatCard = document.createElement('div');
+                beatCard.className = 'beat-card';
+                beatCard.innerHTML = `
+                    <div class="beat-image">
+                        <img src="${beat.image}" alt="${beat.title}">
+                        <div class="play-button" data-beat-id="${beat.id}">
+                            <i class="fas fa-play"></i>
+                        </div>
+                    </div>
+                    <div class="beat-info">
+                        <h3 class="beat-title">${beat.title}</h3>
+                        <p class="beat-producer">by ${beat.producer}</p>
+                        <div class="beat-price">${beat.price} ETH</div>
+                        <div class="beat-actions">
+                            <button class="reaction-btn ${beat.isLiked ? 'active' : ''}" data-beat-id="${beat.id}">
+                                <i class="fas fa-heart"></i> <span>${beat.likes}</span>
+                            </button>
+                            <button class="buy-btn" data-beat-id="${beat.id}">Купить</button>
+                        </div>
+                    </div>
+                `;
+                beatsGrid.appendChild(beatCard);
+            });
+            
+            // Add event listeners to beat cards
+            document.querySelectorAll('.play-button').forEach(button => {
+                button.addEventListener('click', function() {
+                    const beatId = parseInt(this.getAttribute('data-beat-id'));
+                    playBeat(beatId);
+                });
+            });
+            
+            document.querySelectorAll('.reaction-btn').forEach(button => {
+                button.addEventListener('click', function() {
+                    const beatId = parseInt(this.getAttribute('data-beat-id'));
+                    toggleLike(beatId);
+                });
+            });
+            
+            document.querySelectorAll('.buy-btn').forEach(button => {
+                button.addEventListener('click', function() {
+                    const beatId = parseInt(this.getAttribute('data-beat-id'));
+                    buyBeat(beatId);
+                });
+            });
+        }
+
+        // Setup event listeners
+        function setupEventListeners() {
+            // Wallet connection
+            connectWalletBtn.addEventListener('click', toggleWalletModal);
+            
+            walletOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    const walletType = this.getAttribute('data-wallet');
+                    connectWallet(walletType);
+                });
+            });
+            
+            disconnectWalletBtn.addEventListener('click', disconnectWallet);
+            
+            // Withdraw functionality
+            withdrawBtn.addEventListener('click', openWithdrawModal);
+            closeWithdrawModal.addEventListener('click', closeWithdrawModalFunc);
+            confirmWithdraw.addEventListener('click', confirmWithdrawFunc);
+            withdrawAmount.addEventListener('input', updateWithdrawInfo);
+            
+            // Navigation
+            exploreBeatsBtn.addEventListener('click', function() {
+                uploadSection.style.display = 'none';
+                document.querySelector('.beats-section').scrollIntoView({ behavior: 'smooth' });
+            });
+            
+            uploadBeatBtn.addEventListener('click', function() {
+                uploadSection.style.display = 'block';
+                uploadSection.scrollIntoView({ behavior: 'smooth' });
+            });
+            
+            // Upload beat
+            uploadBeatSubmit.addEventListener('click', uploadBeat);
+            
+            // Admin panel
+            adminBtn.addEventListener('click', toggleAdminModal);
+            saveAdminSettings.addEventListener('click', saveAdminSettingsFunc);
+            siteLogo.addEventListener('change', handleLogoUpload);
+            
+            // Close modals when clicking outside
+            window.addEventListener('click', function(event) {
+                if (event.target === walletModal) {
+                    walletModal.classList.remove('active');
+                }
+                if (event.target === withdrawModal) {
+                    closeWithdrawModalFunc();
+                }
+                if (event.target === adminModal) {
+                    adminModal.classList.remove('active');
+                }
+            });
+        }
+
+        // Wallet functionality
+        function toggleWalletModal() {
+            walletModal.classList.toggle('active');
+        }
+
+        function connectWallet(walletType) {
+            // In a real app, this would connect to the actual wallet
+            // For demo purposes, we'll simulate a connection
+            
+            appState.connectedWallet = `0x${Math.random().toString(16).substr(2, 40)}`;
+            appState.walletType = walletType;
+            appState.userBalance = (Math.random() * 2).toFixed(4);
+            
+            // Update UI
+            walletAddress.textContent = `${appState.connectedWallet.substring(0, 6)}...${appState.connectedWallet.substring(38)}`;
+            walletBalance.textContent = appState.userBalance;
+            walletInfo.classList.add('active');
+            
+            // Update connect button
+            connectWalletBtn.innerHTML = `<i class="fas fa-wallet"></i> ${walletType}`;
+            
+            // Close modal
+            walletModal.classList.remove('active');
+            
+            // Show success message
+            showNotification(`Successfully connected to ${walletType}`, 'success');
+        }
+
+        function disconnectWallet() {
+            appState.connectedWallet = null;
+            appState.walletType = null;
+            appState.userBalance = 0;
+            
+            // Update UI
+            walletInfo.classList.remove('active');
+            connectWalletBtn.innerHTML = `<i class="fas fa-wallet"></i> Connect Wallet`;
+            
+            // Show message
+            showNotification('Wallet disconnected', 'info');
+        }
+
+        // Beat functionality
+        function playBeat(beatId) {
+            const beat = beatsData.find(b => b.id === beatId);
+            
+            if (!beat) return;
+            
+            // Stop current audio if playing
+            if (appState.currentAudio) {
+                appState.currentAudio.pause();
+            }
+            
+            // Create and play new audio
+            appState.currentAudio = new Audio(beat.audio);
+            appState.currentAudio.play();
+            
+            // Update play button to pause
+            const playButton = document.querySelector(`.play-button[data-beat-id="${beatId}"] i`);
+            playButton.className = 'fas fa-pause';
+            
+            // Change back to play when audio ends
+            appState.currentAudio.onended = function() {
+                playButton.className = 'fas fa-play';
+            };
+        }
+
+        function toggleLike(beatId) {
+            const beat = beatsData.find(b => b.id === beatId);
+            
+            if (!beat) return;
+            
+            if (beat.isLiked) {
+                beat.likes--;
+                beat.isLiked = false;
+            } else {
+                beat.likes++;
+                beat.isLiked = true;
+            }
+            
+            // Update UI
+            const likeButton = document.querySelector(`.reaction-btn[data-beat-id="${beatId}"]`);
+            const likeCount = likeButton.querySelector('span');
+            
+            likeButton.classList.toggle('active');
+            likeCount.textContent = beat.likes;
+        }
+
+        function buyBeat(beatId) {
+            if (!appState.connectedWallet) {
+                showNotification('Please connect your wallet first', 'error');
+                return;
+            }
+            
+            const beat = beatsData.find(b => b.id === beatId);
+            
+            if (!beat) return;
+            
+            // Calculate commission and net amount
+            const commission = (beat.price * appState.commissionRate) / 100;
+            const netAmount = beat.price - commission;
+            
+            // In a real app, this would process the transaction
+            // For demo, we'll just show a confirmation
+            
+            showNotification(
+                `Purchase successful! ${commission.toFixed(4)} ETH commission sent to platform.`, 
+                'success'
+            );
+            
+            // Update user balance (simulated)
+            appState.userBalance = (parseFloat(appState.userBalance) - beat.price).toFixed(4);
+            walletBalance.textContent = appState.userBalance;
+        }
+
+        function uploadBeat() {
+            const title = document.getElementById('beatTitle').value;
+            const description = document.getElementById('beatDescription').value;
+            const price = parseFloat(document.getElementById('beatPrice').value);
+            const file = document.getElementById('beatFile').files[0];
+            const image = document.getElementById('beatImage').files[0];
+            
+            if (!title || !description || !price || !file) {
+                showNotification('Please fill all required fields', 'error');
+                return;
+            }
+            
+            // Create new beat object
+            const newBeat = {
+                id: beatsData.length + 1,
+                title: title,
+                producer: 'You', // In a real app, this would be the user's name
+                price: price,
+                image: image ? URL.createObjectURL(image) : 'https://via.placeholder.com/300x180/6C63FF/FFFFFF?text=New+Beat',
+                likes: 0,
+                isLiked: false,
+                audio: URL.createObjectURL(file)
+            };
+            
+            // Add to beats data
+            beatsData.unshift(newBeat);
+            
+            // Re-render beats
+            renderBeats();
+            
+            // Reset form
+            document.getElementById('beatTitle').value = '';
+            document.getElementById('beatDescription').value = '';
+            document.getElementById('beatPrice').value = '';
+            document.getElementById('beatFile').value = '';
+            document.getElementById('beatImage').value = '';
+            
+            // Show success message
+            showNotification('Beat uploaded successfully!', 'success');
+            
+            // Navigate to beats section
+            uploadSection.style.display = 'none';
+            document.querySelector('.beats-section').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Withdraw functionality
+        function openWithdrawModal() {
+            if (!appState.connectedWallet) {
+                showNotification('Please connect your wallet first', 'error');
+                return;
+            }
+            
+            withdrawModal.classList.add('active');
+            updateWithdrawInfo();
+        }
+
+        function closeWithdrawModalFunc() {
+            withdrawModal.classList.remove('active');
+        }
+
+        function updateWithdrawInfo() {
+            const amount = parseFloat(withdrawAmount.value) || 0;
+            const commission = (amount * appState.commissionRate) / 100;
+            const receive = amount - commission;
+            
+            withdrawCommission.textContent = `${appState.commissionRate}% (${commission.toFixed(4)} ETH)`;
+            withdrawReceive.textContent = `${receive.toFixed(4)} ETH`;
+        }
+
+        function confirmWithdrawFunc() {
+            const amount = parseFloat(withdrawAmount.value);
+            
+            if (!amount || amount <= 0) {
+                showNotification('Please enter a valid amount', 'error');
+                return;
+            }
+            
+            if (amount > parseFloat(appState.userBalance)) {
+                showNotification('Insufficient balance', 'error');
+                return;
+            }
+            
+            // Calculate commission and net amount
+            const commission = (amount * appState.commissionRate) / 100;
+            const netAmount = amount - commission;
+            
+            // In a real app, this would process the withdrawal
+            // For demo, we'll just show a confirmation
+            
+            showNotification(
+                `Withdrawal successful! ${netAmount.toFixed(4)} ETH sent to your wallet. ${commission.toFixed(4)} ETH commission applied.`, 
+                'success'
+            );
+            
+            // Update user balance (simulated)
+            appState.userBalance = (parseFloat(appState.userBalance) - amount).toFixed(4);
+            walletBalance.textContent = appState.userBalance;
+            
+            // Close modal
+            closeWithdrawModalFunc();
+        }
+
+        // Admin functionality
+        function toggleAdminModal() {
+            adminModal.classList.toggle('active');
+        }
+
+        function saveAdminSettingsFunc() {
+            const newCommissionRate = parseInt(commissionRate.value);
+            
+            if (newCommissionRate < 1 || newCommissionRate > 20) {
+                showNotification('Commission rate must be between 1% and 20%', 'error');
+                return;
+            }
+            
+            appState.commissionRate = newCommissionRate;
+            
+            showNotification('Admin settings saved successfully!', 'success');
+            adminModal.classList.remove('active');
+        }
+
+        function handleLogoUpload(event) {
+            const file = event.target.files[0];
+            
+            if (file) {
+                const reader = new FileReader();
+                
+                reader.onload = function(e) {
+                    siteLogoImg.src = e.target.result;
+                    
+                    // Save to localStorage for persistence
+                    localStorage.setItem('siteLogo', e.target.result);
+                };
+                
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function loadAdminSettings() {
+            // Load commission rate
+            const savedCommissionRate = localStorage.getItem('commissionRate');
+            if (savedCommissionRate) {
+                appState.commissionRate = parseInt(savedCommissionRate);
+                commissionRate.value = appState.commissionRate;
+            }
+            
+            // Load site logo
+            const savedLogo = localStorage.getItem('siteLogo');
+            if (savedLogo) {
+                siteLogoImg.src = savedLogo;
+            }
+        }
+
+        // Utility functions
+        function showNotification(message, type) {
+            // Create notification element
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.textContent = message;
+            
+            // Style the notification
+            notification.style.position = 'fixed';
+            notification.style.top = '20px';
+            notification.style.right = '20px';
+            notification.style.padding = '15px 20px';
+            notification.style.borderRadius = '8px';
+            notification.style.color = 'white';
+            notification.style.fontWeight = '600';
+            notification.style.zIndex = '10000';
+            notification.style.boxShadow = '0 5px 15px rgba(0, 0, 0, 0.2)';
+            notification.style.transition = 'all 0.3s ease';
+            
+            // Set background color based on type
+            switch(type) {
+                case 'success':
+                    notification.style.backgroundColor = 'var(--success)';
+                    break;
+                case 'error':
+                    notification.style.backgroundColor = 'var(--error)';
+                    break;
+                case 'warning':
+                    notification.style.backgroundColor = 'var(--warning)';
+                    break;
+                default:
+                    notification.style.backgroundColor = 'var(--primary)';
+            }
+            
+            // Add to page
+            document.body.appendChild(notification);
+            
+            // Remove after 3 seconds
+            setTimeout(() => {
+                notification.style.opacity = '0';
+                notification.style.transform = 'translateX(100px)';
+                
+                setTimeout(() => {
+                    document.body.removeChild(notification);
+                }, 300);
+            }, 3000);
+        }
+
+        // Initialize the app
+        document.addEventListener('DOMContentLoaded', initApp);
+    </script>
+</body>
+</html>
